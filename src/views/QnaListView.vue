@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { localAxios } from "@/utils/http-commons";
+import { listQna } from "@/api/qna";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
-const axios = localAxios()
 const router = useRouter()
 
 type QnaList = {
@@ -18,7 +17,7 @@ type QnaList = {
 const list = ref<QnaList>([]);
 
 onMounted(() => {
-    axios.get("/board").then(res => list.value = res.data).catch(console.error);
+    listQna().then(res => list.value = res.data).catch(console.error);
     list.value = [9, 8, 7, 6, 5, 4, 3, 2, 1].map(no => ({
         articleNo: no, userName: "writer", subject: "subject", content: "content", hit: no, registerTime: new Date().toLocaleString()
     }))

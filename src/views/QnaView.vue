@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { localAxios } from "@/utils/http-commons";
+import { deleteQna, getQna } from "@/api/qna";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-const axios = localAxios()
-const route = useRoute();
+const route = useRoute()
+const router = useRouter();
 
 interface Qna {
     articleNo: number
@@ -15,14 +15,20 @@ interface Qna {
     registerTime: string
 }
 
-const qna = ref<Qna>();
+const qna = ref<Qna>()
 
 onMounted(() => {
-    axios.get("/board/" + route.query.no).then(res => qna.value = res.data).catch(console.error);
+    const no = route.query.no?.toString()!
+    getQna(no).then(res => qna.value = res.data).catch(console.error);
     qna.value = {
         articleNo: 1, userName: "writer", subject: "temp data subject", content: "content", hit: 1, registerTime: new Date().toLocaleString()
     }
 })
+
+function remove() {
+    const no = route.query.no?.toString()!
+    deleteQna(no).then(() => router.push({ name: 'list' })).catch(err => alert("글 삭제 실패!: " + err))
+}
 </script>
 
 <template>
@@ -36,9 +42,7 @@ onMounted(() => {
         <router-link :to="{ name: 'edit' }">
             <v-btn>글수정</v-btn>
         </router-link>
-        <!-- <router-link :to="{ name: '' }"> -->
-        <v-btn disabled>글삭제</v-btn>
-        <!-- </router-link> -->
+        <v-btn @click="remove">글삭제</v-btn>
         <router-link :to="{ name: 'list' }">
             <v-btn>글목록</v-btn>
         </router-link>
