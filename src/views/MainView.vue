@@ -82,6 +82,7 @@ img {
   align-items: center;
   color: black;
   margin: auto;
+  gap: 0.5rem;
 }
 
 .main-search-input{
