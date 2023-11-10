@@ -1,20 +1,14 @@
 <script setup lang="ts">
-import { onMounted, watch } from 'vue';
-import { ref, defineProps } from 'vue';
-
-interface MarkerInfo {
-  /** `[lat, lng]` */
-  position: [number, number]
-}
+import { onMounted } from 'vue';
+import { ref } from 'vue';
 
 const props = defineProps<{
   /** `[lat, lng]` */
   center: [number, number]
-  markers?: MarkerInfo[]
 }>();
 
 const map = ref<kakao.maps.Map | null>(null);
-const kakaoMarkers = ref<kakao.maps.Marker[]>([]);
+// const kakaoMarkers = ref<kakao.maps.Marker[]>([]);
 const loaded = ref(false);
 
 onMounted(() => {
@@ -25,15 +19,15 @@ onMounted(() => {
   }
 })
 
-watch([loaded, () => props.markers], ([, newMarkers]) => {
-  if (!loaded.value) return;
-  for (const kakaoMarker of kakaoMarkers.value) {
-    kakaoMarker.setMap(null);
-  }
-  if (newMarkers) {
-    kakaoMarkers.value = newMarkers.map(addMarker);
-  }
-}, { immediate: true, deep: true });
+// watch([loaded, () => props.markers], ([, newMarkers]) => {
+//   if (!loaded.value) return;
+//   for (const kakaoMarker of kakaoMarkers.value) {
+//     kakaoMarker.setMap(null);
+//   }
+//   if (newMarkers) {
+//     kakaoMarkers.value = newMarkers.map(addMarker);
+//   }
+// }, { immediate: true, deep: true });
 
 function loadScript() {
   const script = document.createElement("script");
@@ -52,12 +46,12 @@ function loadMap() {
   loaded.value = true;
 }
 
-function addMarker(marker: MarkerInfo) {
-  const position = new window.kakao.maps.LatLng(...marker.position);
-  const kakaoMarker = new window.kakao.maps.Marker({ position });
-  kakaoMarker.setMap(map.value);
-  return kakaoMarker;
-}
+// function addMarker(marker: MarkerInfo) {
+//   const position = new window.kakao.maps.LatLng(...marker.position);
+//   const kakaoMarker = new window.kakao.maps.Marker({ position });
+//   kakaoMarker.setMap(map.value);
+//   return kakaoMarker;
+// }
 </script>
 
 <template>
@@ -67,6 +61,6 @@ function addMarker(marker: MarkerInfo) {
 <style scoped>
 #map {
   width: 100%;
-  height: 400px;
+  height: 350px;
 }
 </style>
