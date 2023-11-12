@@ -46,10 +46,24 @@ onMounted(() => {
                 </tr>
             </tbody>
         </v-table>
-        <router-link :to="{ name: 'write' }">
-            <v-btn>글쓰기</v-btn>
-        </router-link>
+        <div class="bottom">
+            <router-link :to="{ name: 'write' }">
+                <v-btn>글쓰기</v-btn>
+            </router-link>
+            <div class="search">
+                <v-text-field label="검색"></v-text-field>
+            </div>
+            <v-btn>검색</v-btn>
+        </div>
     </v-main>
 </template>
 
-<style scoped></style>
+<style scoped>
+.bottom {
+    display: flex;
+}
+
+.search {
+    width: 300px;
+}
+</style>
