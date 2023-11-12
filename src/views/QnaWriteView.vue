@@ -33,15 +33,17 @@ function post() {
 </script>
 
 <template>
-    <h1>Q&A</h1>
-    <v-text-field label="제목" v-model="qnaReq.subject"></v-text-field>
-    <div>작성자: (나중에 넣기)</div>
-    <hr>
-    <v-textarea label="내용" v-model="qnaReq.content"></v-textarea>
-    <v-btn @click="post">작성</v-btn>
-    <router-link :to="{ name: 'list' }">
-        <v-btn>취소</v-btn>
-    </router-link>
+    <v-main>
+        <h1>Q&A</h1>
+        <v-text-field label="제목" v-model="qnaReq.subject"></v-text-field>
+        <!-- <div>작성자: (나중에 넣기)</div> -->
+        <hr>
+        <v-textarea label="내용" v-model="qnaReq.content"></v-textarea>
+        <v-btn @click="post">작성</v-btn>
+        <router-link :to="{ name: 'list' }">
+            <v-btn>취소</v-btn>
+        </router-link>
+    </v-main>
 </template>
 
 <style scoped></style>

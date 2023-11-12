@@ -18,27 +18,25 @@ interface Qna {
 const qna = ref<Qna>()
 
 onMounted(() => {
-    const no = route.query.no?.toString()!
+    const no = route.params.no.toString()
     getQna(no).then(res => qna.value = res.data).catch(console.error);
-    qna.value = {
-        articleNo: 1, userName: "writer", subject: "temp data subject", content: "content", hit: 1, registerTime: new Date().toLocaleString()
-    }
 })
 
 function remove() {
-    const no = route.query.no?.toString()!
+    const no = route.params.no.toString()!
     deleteQna(no).then(() => router.push({ name: 'list' })).catch(err => alert("글 삭제 실패!: " + err))
 }
 </script>
 
 <template>
-    <h1>Q&A</h1>
     <v-main v-if="qna">
+        <h1>Q&A</h1>
         <h2>{{ qna.subject }}</h2>
-        <div>작성자: {{ qna.userName }}, 조회수: {{ qna.hit }}</div>
+        <!-- <div>작성자: {{ qna.userName }}, 조회수: {{ qna.hit }}</div> -->
+        <div>조회수: {{ qna.hit }}</div>
         <div>작성일: {{ qna.registerTime }}</div>
         <hr>
-        <div>{{ qna.content }}</div>
+        <div class="content">{{ qna.content }}</div>
         <router-link :to="{ name: 'edit' }">
             <v-btn>글수정</v-btn>
         </router-link>
@@ -49,4 +47,8 @@ function remove() {
     </v-main>
 </template>
 
-<style scoped></style>
+<style scoped>
+.content {
+    white-space: pre;
+}
+</style>

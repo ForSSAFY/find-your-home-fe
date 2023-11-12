@@ -1,7 +1,7 @@
 import { localAxios } from '@/utils/http-commons'
 
 const axios = localAxios()
-const path = '/qna'
+const path = import.meta.env.VITE_VUE_API_URL + '/qna'
 
 /*
   userId는 세션에서 처리
@@ -22,6 +22,10 @@ export function writeQna(writeQnaDto: { subject: string; content: string }) {
 
 export function getQna(no: number | string) {
   return axios.get(path + '/' + no)
+}
+
+export function getEditQna(no: number | string) {
+  return axios.get(path + '/modify/' + no)
 }
 
 export function editQna(no: number | string, editQnaDto: { subject: string; content: string }) {
