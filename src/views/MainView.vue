@@ -13,7 +13,7 @@ const cards = [
       <video src="\src\assets\cityview.mp4" muted loop autoplay playsinline></video>
       <!-- <img src="\src\assets\sample.jpg" /> -->
       <div class="main-video-text">
-        <h1>Find Your House</h1>
+        <h1>Find Your Home</h1>
         <p>우리는 당신이 편하게 쉴 수 있는 집을 찾아 주고 싶습니다.</p>
         <br />
         <div class="main-search pa-2">

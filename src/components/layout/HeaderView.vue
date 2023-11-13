@@ -5,7 +5,7 @@
     <v-app-bar :elevation="3">
       <div class="wrapper">
         <nav>
-          <v-btn>Find Your House</v-btn>
+          <v-btn>Find Your Home</v-btn>
           <v-btn>관심 지역</v-btn>
           <v-btn>Q&A</v-btn>
         </nav>
@@ -37,11 +37,12 @@ header {
 .center {
   display: flex;
   justify-content: center;
-  max-width: 180px;
 }
 .center-logo{
   text-align: center;
+  width: 100px;
 }
+
 .login {
   display: flex;
   justify-content: end;
