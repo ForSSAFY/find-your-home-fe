@@ -1,14 +1,15 @@
-<script lang="ts" setup>
-defineProps({ title: String, subTitle: String, text: String })
+<script setup lang="ts">
+const news = defineProps < { title: string, subtitle: string, imgurl: string }
+>()
 </script>
 
 <template>
   <v-card class="pa-5">
-    <v-img src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg" cover></v-img>
+    <v-img :src="news.imgurl" cover></v-img>
 
-    <v-card-title> Top western road trips </v-card-title>
+    <v-card-title> {{ news.title }} </v-card-title>
 
-    <v-card-subtitle> 1,000 miles of wonder </v-card-subtitle>
+    <v-card-subtitle> {{ news.subtitle }} </v-card-subtitle>
   </v-card>
 </template>
 
