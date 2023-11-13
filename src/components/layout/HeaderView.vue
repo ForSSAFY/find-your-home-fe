@@ -4,11 +4,11 @@
   <header>
     <v-app-bar :elevation="3">
       <div class="wrapper">
-        <nav>
+        <div>
           <v-btn>Find Your Home</v-btn>
           <v-btn>관심 지역</v-btn>
           <v-btn>Q&A</v-btn>
-        </nav>
+        </div>
         <div class="center">
           <v-app-bar-title class="center-logo">
             <v-img src="/src/assets/logo.PNG"></v-img>
@@ -24,14 +24,13 @@
 </template>
 
 <style scoped>
-header {
-  padding: 1rem;
-}
 .wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  max-width: 1200px;
+  max-width: 1300px;
   width: 100%;
+  align-items: center;
+  padding: 1rem;
   margin: 0 auto;
 }
 .center {
@@ -40,7 +39,7 @@ header {
 }
 .center-logo{
   text-align: center;
-  width: 100px;
+  max-width: 250px;
 }
 
 .login {
