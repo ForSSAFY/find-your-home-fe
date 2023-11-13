@@ -7,10 +7,10 @@ const cards = [
   { title: '제목4', subtitle: '부제목4', imgurl: 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg' }
 ]
 const notices = [
-  { title: '공지사항 1' },
-  { title: '공지사항 2' },
-  { title: '공지사항 3' },
-  { title: '공지사항 4' },
+  { title: '[공지] Find your house 개인정보처리방침 (2023/09/21) 개정안내' },
+  { title: '[공지] Find your house 개인정보처리방침 (2023/08/21) 개정안내' },
+  { title: '[공지] Find your house 개인정보처리방침 (2023/07/21) 개정안내' },
+  { title: '[공지] Find your house 개인정보처리방침 (2023/06/21) 개정안내' },
 ]
 </script>
 <template>
@@ -19,12 +19,14 @@ const notices = [
       <div class="main-video">
         <video src="\src\assets\cityview.mp4" muted loop autoplay playsinline></video>
         <!-- <img src="\src\assets\sample.jpg" /> -->
-        <div class="main-video-text">
-          <h1>Find Your Home</h1>
-          <p>우리는 당신이 편하게 쉴 수 있는 집을 찾아 주고 싶습니다.</p>
-          <br />
-          <div class="main-search pa-2">
-            <v-text-field class="main-search-input" placeholder="검색어를 입력해주세요" hide-details="auto"></v-text-field>
+        <div class="main-video-container">
+          <div class="main-video-text">
+            <h1>Find Your Home</h1>
+            <p>우리는 당신이 편하게 쉴 수 있는 집을 찾아 주고 싶습니다.</p>
+            <br />
+          </div>
+          <div class="main-video-search pa-2">
+            <v-text-field class="main-search-input" variant="solo" placeholder="검색어를 입력해주세요" hide-details="auto"></v-text-field>
             <v-btn icon><svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M13 4.069V2h-2v2.069A8.01 8.01 0 0 0 4.069 11H2v2h2.069A8.008 8.008 0 0 0 11 19.931V22h2v-2.069A8.007 8.007 0 0 0 19.931 13H22v-2h-2.069A8.008 8.008 0 0 0 13 4.069zM12 18c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6z"/></svg></v-btn>
             <v-btn>검색</v-btn>
           </div>
@@ -41,17 +43,10 @@ const notices = [
       <div class="main-notice">
         <h2>공지 사항</h2>
         <table>
-          <tr v-for="(n, index) in notices" :key="index">
-            <td>{{ index }}</td>
+          <tr v-for="n in notices" :key="n.title">
             <td>{{ n.title }}</td>
           </tr>
         </table>
-        <ul>
-          <li>[공지] Find your house 개인정보처리방침 (2023/09/21) 개정안내</li>
-          <li>[공지] Find your house 개인정보처리방침 (2023/08/21) 개정안내</li>
-          <li>[공지] Find your house 개인정보처리방침 (2023/07/21) 개정안내</li>
-          <li>[공지] Find your house 개인정보처리방침 (2023/06/21) 개정안내</li>
-        </ul>
       </div>
     </div>
   </v-main>
@@ -66,8 +61,8 @@ const notices = [
   position: relative;
   width: 100vw;
   height: 55vh;
-  overflow-y: hidden;
-  overflow-x: hidden;
+  /* overflow-y: hidden; */
+  /* overflow-x: hidden; */
 }
 .main-video-text {
   position: absolute;
@@ -85,7 +80,10 @@ video {
   object-fit: cover;
 }
 
-.main-search {
+.main-video-search {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
   text-align: center;
   background-color: white;
   display: flex;
@@ -94,10 +92,16 @@ video {
   color: black;
   margin: auto;
   gap: 0.5rem;
+  width: 45vw;
+  border: 1px solid #e2e0dd;
+  border-radius: 8px;
 }
 
 .main-search-input{
   background-color:white;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
 }
 
 /* 두번째 화면 시작 */
@@ -123,8 +127,19 @@ video {
 
 /* 공지사항 화면 */
 .main-notice {
-    margin-top: 10%;
+  margin-top: 10%;
   text-align: center;
+}
+
+.main-notice table {
+  margin-top: 10%;
+  text-align: center;
+  margin: 0 auto;
+}
+.main-notice table tr td {
+  margin-top: 10%;
+  text-align: center;
+  padding: 1vh;
 }
 
 
