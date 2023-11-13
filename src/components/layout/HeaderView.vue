@@ -47,4 +47,8 @@
   justify-content: end;
   gap: 1rem;
 }
+
+.login button{
+  outline: 1px solid black;
+}
 </style>
