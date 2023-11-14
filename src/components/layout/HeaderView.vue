@@ -30,7 +30,7 @@
   max-width: 1300px;
   width: 100%;
   align-items: center;
-  padding: 1rem;
+  padding: 1vh;
   margin: 0 auto;
 }
 .center {
@@ -39,7 +39,7 @@
 }
 .center-logo{
   text-align: center;
-  max-width: 250px;
+  max-width: 200px;
 }
 
 .login {

@@ -81,12 +81,11 @@ video {
 }
 
 .main-video-search {
+  display: flex;
   position: absolute;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  background-color: white;
-  display: flex;
   justify-content: center;
   align-items: center;
   color: black;
@@ -94,6 +93,7 @@ video {
   gap: 0.5rem;
   width: 45vw;
   border: 1px solid #e2e0dd;
+  background-color: white;
   border-radius: 8px;
 }
 
