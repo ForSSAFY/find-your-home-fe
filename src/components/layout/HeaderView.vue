@@ -7,7 +7,7 @@
         <div>
           <v-btn>Find Your Home</v-btn>
           <v-btn>관심 지역</v-btn>
-          <v-btn>Q&A</v-btn>
+          <router-link to="/qna"><v-btn>Q&A</v-btn></router-link>
         </div>
         <div class="center">
           <v-app-bar-title class="center-logo">

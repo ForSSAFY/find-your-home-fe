@@ -11,7 +11,7 @@ const router = createRouter({
     {
       path: '/qna',
       name: 'qna',
-      component: () => import("@/views/QnaMainView.vue") 
+      component: () => import("@/views/QnaView.vue") 
     }
   ]
 })
