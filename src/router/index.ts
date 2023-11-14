@@ -7,6 +7,11 @@ const router = createRouter({
       path: '/',
       name: 'main',
       component: () => import("@/views/MainView.vue") 
+    },
+    {
+      path: '/qna',
+      name: 'qna',
+      component: () => import("@/views/QnaMainView.vue") 
     }
   ]
 })
