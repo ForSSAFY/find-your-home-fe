@@ -15,7 +15,7 @@ const visible = ref(false)
         <v-text-field
           density="compact"
           placeholder="아이디"
-          prepend-inner-icon="email"
+          prepend-inner-icon="person"
           variant="outlined"
         ></v-text-field>
 
@@ -32,7 +32,7 @@ const visible = ref(false)
         </div>
 
         <v-text-field
-          :append-inner-icon="visible ? '' : 'eye'"
+          :append-inner-icon="visible ? 'visibility_off' : 'visibility'"
           :type="visible ? 'text' : 'password'"
           density="compact"
           placeholder="비밀번호"
