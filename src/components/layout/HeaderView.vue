@@ -7,16 +7,18 @@
         <div>
           <v-btn>Find Your Home</v-btn>
           <v-btn>관심 지역</v-btn>
-          <router-link to="/qna"><v-btn>Q&A</v-btn></router-link>
+          <router-link :to="{name:'qna'}"><v-btn>Q&A</v-btn></router-link>
         </div>
         <div class="center">
           <v-app-bar-title class="center-logo">
-            <v-img src="/src/assets/logo.PNG"></v-img>
-          </v-app-bar-title>
+              <router-link :to="{name:'main'}">
+                <v-img src="/src/assets/logo.PNG"></v-img>
+              </router-link>
+            </v-app-bar-title>
         </div>
         <div class="login">
-          <v-btn>로그인</v-btn>
-          <v-btn>회원가입</v-btn>
+          <router-link :to="{name:'login'}"><v-btn>로그인</v-btn></router-link>
+          <router-link :to="{name:'join'}"><v-btn>회원가입</v-btn></router-link>
         </div>
       </div>
     </v-app-bar>
