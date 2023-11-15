@@ -9,9 +9,41 @@ const router = createRouter({
       component: () => import("@/views/MainView.vue") 
     },
     {
+      path: '/login',
+      name: 'login',
+      component: () => import("@/views/LoginView.vue") 
+    },
+    {
+      path: '/join',
+      name: 'join',
+      component: () => import("@/views/JoinView.vue") 
+    },
+    {
       path: '/qna',
       name: 'qna',
-      component: () => import("@/views/QnaView.vue") 
+      redirect: { name: 'list' },
+      children: [
+        {
+          path: 'view/:no',
+          name: 'view',
+          component: () => import('@/views/QnaView.vue')
+        },
+        {
+          path: 'list',
+          name: 'list',
+          component: () => import('@/views/QnaListView.vue')
+        },
+        {
+          path: 'edit/:no',
+          name: 'edit',
+          component: () => import('@/views/QnaEditView.vue')
+        },
+        {
+          path: 'write',
+          name: 'write',
+          component: () => import('@/views/QnaWriteView.vue')
+        }
+      ]
     }
   ]
 })
