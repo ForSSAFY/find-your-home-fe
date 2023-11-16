@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref, computed } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { email, required } from '@vuelidate/validators'
+import { required } from '@vuelidate/validators'
 
 //props 역할
 interface State {
   nickname: string
-  email: string
+  id: string
   password: string
   passwordchk: string
   checkbox: boolean | null
@@ -14,7 +14,7 @@ interface State {
 
 const initialState: State = {
   nickname: '',
-  email: '',
+  id: '',
   password: '',
   passwordchk: '',
   checkbox: null
@@ -26,7 +26,7 @@ const state = reactive<State>({
 
 const rules = {
   nickname: { required },
-  email: { required },
+  id: { required },
   password: { required },
   passwordchk: { required },
   checkbox: { required }
@@ -43,6 +43,11 @@ function clear() {
 }
 
 const visible = ref(false)
+
+//비밀 번호가 일치 하지 않을 경우
+// const passwordNotMatch = computed(() => {
+//   return v$.password.value  !== v$.passwordchk.value;
+// })
 </script>
 
 <template>
@@ -52,7 +57,6 @@ const visible = ref(false)
       <form class="joinForm">
         <v-text-field
           v-model="state.nickname"
-          :error-messages="v$.nickname.$errors.map((e) => e.$message)"
           :counter="8"
           variant="outlined"
           placeholder="닉네임"
@@ -60,43 +64,43 @@ const visible = ref(false)
           @input="v$.nickname.$touch"
           @blur="v$.nickname.$touch"
         ></v-text-field>
+        <div class="errors" v-if="v$.nickname.$error">닉네임을 입력하세요.</div>
 
         <v-text-field
-          v-model="state.email"
-          :error-messages="v$.email.$errors.map((e) => e.$message)"
-          placeholder="id"
+          v-model="state.id"
+          placeholder="아이디"
           variant="outlined"
           required
-          @input="v$.email.$touch"
-          @blur="v$.email.$touch"
+          @input="v$.id.$touch"
+          @blur="v$.id.$touch"
         ></v-text-field>
+        <div class="errors" v-if="v$.id.$error">아이디를 입력하세요.</div>
 
         <v-text-field
           :append-inner-icon="visible ? 'visibility_off' : 'visibility'"
           :type="visible ? 'text' : 'password'"
           v-model="state.password"
-          :error-messages="v$.email.$errors.map((e) => e.$message)"
-          placeholder="password"
+          placeholder="비밀번호"
           variant="outlined"
           required
           @input="v$.password.$touch"
           @blur="v$.password.$touch"
           @click:append-inner="visible = !visible"
         ></v-text-field>
+        <div class="errors" v-if="v$.password.$error">비밀번호를 입력하세요.</div>
 
         <v-text-field
           v-model="state.passwordchk"
-          :error-messages="v$.passwordchk.$errors.map((e) => e.$message)"
-          placeholder="password 확인"
+          placeholder="비밀번호 확인"
           variant="outlined"
           required
           @input="v$.passwordchk.$touch"
           @blur="v$.passwordchk.$touch"
         ></v-text-field>
+        <!-- <div v-if="passwordNotMatch">비밀번호가 일치하지 않습니다.</div> -->
 
         <v-checkbox
           v-model="state.checkbox"
-          :error-messages="v$.checkbox.$errors.map((e) => e.$message)"
           label="개인정보 이용에 동의하십니까?"
           required
           @change="v$.checkbox.$touch"
