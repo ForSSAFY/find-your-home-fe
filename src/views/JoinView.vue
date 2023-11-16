@@ -44,10 +44,6 @@ function clear() {
 
 const visible = ref(false)
 
-//비밀 번호가 일치 하지 않을 경우
-// const passwordNotMatch = computed(() => {
-//   return v$.password.value  !== v$.passwordchk.value;
-// })
 </script>
 
 <template>
@@ -56,17 +52,18 @@ const visible = ref(false)
       <h1 class="pt-5 pb-5">회원가입</h1>
       <form class="joinForm">
         <v-text-field
-          v-model="state.nickname"
           :counter="8"
+          :error-messages="v$.nickname.$errors.map((e) => '닉네임을 입력하세요.')"
+          v-model="state.nickname"
           variant="outlined"
           placeholder="닉네임"
           required
           @input="v$.nickname.$touch"
           @blur="v$.nickname.$touch"
         ></v-text-field>
-        <div class="errors" v-if="v$.nickname.$error">닉네임을 입력하세요.</div>
 
         <v-text-field
+          :error-messages="v$.id.$errors.map((e) => '아이디를 입력하세요.')"
           v-model="state.id"
           placeholder="아이디"
           variant="outlined"
@@ -74,9 +71,9 @@ const visible = ref(false)
           @input="v$.id.$touch"
           @blur="v$.id.$touch"
         ></v-text-field>
-        <div class="errors" v-if="v$.id.$error">아이디를 입력하세요.</div>
 
         <v-text-field
+          :error-messages="v$.password.$errors.map((e) => '비밀번호를 입력하세요.')"
           :append-inner-icon="visible ? 'visibility_off' : 'visibility'"
           :type="visible ? 'text' : 'password'"
           v-model="state.password"
@@ -87,17 +84,16 @@ const visible = ref(false)
           @blur="v$.password.$touch"
           @click:append-inner="visible = !visible"
         ></v-text-field>
-        <div class="errors" v-if="v$.password.$error">비밀번호를 입력하세요.</div>
 
         <v-text-field
           v-model="state.passwordchk"
           placeholder="비밀번호 확인"
           variant="outlined"
           required
+          :error-messages="v$.passwordchk.$errors.map((e) => '비밀번호 확인을입력하세요.')"
           @input="v$.passwordchk.$touch"
           @blur="v$.passwordchk.$touch"
         ></v-text-field>
-        <!-- <div v-if="passwordNotMatch">비밀번호가 일치하지 않습니다.</div> -->
 
         <v-checkbox
           v-model="state.checkbox"
@@ -107,8 +103,8 @@ const visible = ref(false)
           @blur="v$.checkbox.$touch"
         ></v-checkbox>
 
-        <v-btn class="me-4" @click="v$.$validate"> submit </v-btn>
-        <v-btn @click="clear"> clear </v-btn>
+        <v-btn class="me-4" @click="v$.$validate">가입하기</v-btn>
+        <v-btn @click="clear">초기화</v-btn>
       </form>
     </div>
   </v-main>
@@ -123,8 +119,8 @@ const visible = ref(false)
 }
 
 .joinForm {
-  text-align: center;
   margin: 0 auto;
   max-width: 350px;
+  gap: 1vh;
 }
 </style>
