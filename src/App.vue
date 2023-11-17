@@ -1,15 +1,19 @@
 <script setup lang="ts">
-import IndexView from "@/views/IndexView.vue"
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
   <v-layout>
-    <div>
-      <IndexView/> 
-    </div>
+    <router-view />
   </v-layout>
 </template>
 
-<style scoped>
+<style>
+html {
+  overflow-y: auto !important;
+}
 
+html > body {
+  font-family: 'Pretendard Variable';
+}
 </style>

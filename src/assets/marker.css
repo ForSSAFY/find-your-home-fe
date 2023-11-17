@@ -1,0 +1,84 @@
+.marker__wrapper {
+  --marker-bg-color: rgba(0, 0, 0, 0.9);
+  --marker-bg-color-hover: white;
+  --marker-border-color: rgb(0, 0, 0);
+  --marker-border-color-hover: rgb(0, 0, 0);
+  --marker-title-color: white;
+  --marker-title-color-hover: rgba(0, 0, 0, 0.87);
+  --marker-desc-color: rgb(220, 220, 220);
+  --marker-desc-color-hover: rgba(0, 0, 0, 0.87);
+  --marker-arrow-width: 9px;
+  --marker-arrow-height: 12px;
+}
+
+.marker__wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 6px 6px 4px;
+  line-height: 1;
+  gap: 4px;
+  user-select: none;
+  cursor: pointer;
+  background-color: var(--marker-bg-color);
+  border: 1px solid var(--marker-border-color);
+  border-radius: 4px;
+}
+
+* > .marker__wrapper:hover {
+  z-index: 2000;
+}
+
+.marker__wrapper:hover {
+  background-color: var(--marker-bg-color-hover);
+  border: 1px solid var(--marker-border-color-hover);
+}
+
+.marker__wrapper::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(var(--marker-arrow-height) * -1);
+  border-left: var(--marker-arrow-width) solid transparent;
+  border-right: var(--marker-arrow-width) solid transparent;
+  border-top: var(--marker-arrow-height) solid var(--marker-border-color);
+}
+
+.marker__wrapper::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(var(--marker-arrow-height) * -1 + 1px);
+  border-left: var(--marker-arrow-width) solid transparent;
+  border-right: var(--marker-arrow-width) solid transparent;
+  border-top: var(--marker-arrow-height) solid var(--marker-bg-color);
+}
+
+.marker__wrapper:hover::after {
+  border-top-color: var(--marker-bg-color-hover);
+}
+
+.marker__title {
+  font-weight: 500;
+  color: var(--marker-title-color);
+}
+
+.marker__wrapper:hover .marker__title {
+  color: var(--marker-title-color-hover);
+}
+
+.marker__desc {
+  font-weight: 300;
+  font-size: x-small;
+  color: var(--marker-desc-color);
+}
+
+.marker__wrapper:hover .marker__desc {
+  color: var(--marker-desc-color-hover);
+}
+
+.marker__wrapper--group {
+}
