@@ -132,7 +132,7 @@ const visible = ref(false)
 .join-form {
   max-width: 800px;
   width: 100%;
-  padding: 64px;
+  padding: 4rem;
   box-shadow: 0px 10px 20px rgb(0, 0, 0, 0.38);
 }
 

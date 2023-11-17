@@ -5,69 +5,59 @@ const visible = ref(false)
 </script>
 
 <template>
-  <v-main>
-    <div class="container">
-      <v-card class="login-form" elevation="8" rounded="0">
-        <div class="login-form-inner">
-          <div class="header mb-3">
-            <h2>로그인</h2>
-            <div class="header-line"></div>
-          </div>
+  <v-main class="container">
+    <v-card class="login-form" rounded="0">
+      <div class="header">
+        <h2>로그인</h2>
+        <div class="header-line"></div>
+      </div>
 
-          <v-text-field
-            rounded="0"
-            density="comfortable"
-            placeholder="아이디"
-            prepend-inner-icon="person"
-            variant="outlined"
-          ></v-text-field>
+      <v-text-field
+        rounded="0"
+        density="comfortable"
+        placeholder="아이디"
+        prepend-inner-icon="person"
+        variant="outlined"
+      ></v-text-field>
 
-          <v-text-field
-            rounded="0"
-            :append-inner-icon="visible ? 'visibility_off' : 'visibility'"
-            :type="visible ? 'text' : 'password'"
-            density="comfortable"
-            placeholder="비밀번호"
-            prepend-inner-icon="lock"
-            variant="outlined"
-            @click:append-inner="visible = !visible"
-          ></v-text-field>
+      <v-text-field
+        rounded="0"
+        :append-inner-icon="visible ? 'visibility_off' : 'visibility'"
+        :type="visible ? 'text' : 'password'"
+        density="comfortable"
+        placeholder="비밀번호"
+        prepend-inner-icon="lock"
+        variant="outlined"
+        @click:append-inner="visible = !visible"
+      ></v-text-field>
 
-          <v-btn class="login-button" rounded="0">로그인</v-btn>
+      <v-btn class="login-button" rounded="0">로그인</v-btn>
 
-          <v-card-text class="find_wrap">
-            <router-link to="/join" class="text-decoration-none">아이디 찾기</router-link>
-            <v-divider inset vertical></v-divider>
-            <router-link to="/join" class="text-decoration-none">비밀번호 찾기</router-link>
-            <v-divider inset vertical></v-divider>
-            <router-link to="/join" class="text-decoration-none">회원 가입</router-link>
-          </v-card-text>
-        </div>
-      </v-card>
-    </div>
+      <div class="find_wrap">
+        <router-link to="/join" class="text-decoration-none">아이디 찾기</router-link>
+        <v-divider inset vertical></v-divider>
+        <router-link to="/join" class="text-decoration-none">비밀번호 찾기</router-link>
+        <v-divider inset vertical></v-divider>
+        <router-link to="/join" class="text-decoration-none">회원 가입</router-link>
+      </div>
+    </v-card>
   </v-main>
 </template>
 
 <style scoped>
 .container {
-  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
 }
 .login-form {
-  width: 800px;
-  height: 600px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  max-width: 600px;
+  width: 100%;
+  padding: 4rem;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.37);
-}
-
-.login-form-inner {
-  width: 580px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .header {
@@ -76,12 +66,13 @@ const visible = ref(false)
   align-items: baseline;
   justify-content: space-between;
   gap: 16px;
+  margin-bottom: 2rem;
 }
 
 .header h2 {
-  text-align: left;
   font-weight: 700;
   font-size: 40px;
+  line-height: 1;
 }
 
 .header-line {
@@ -97,7 +88,7 @@ const visible = ref(false)
 
 /* 로그인 버튼 */
 .login-button {
-  width: 580px;
+  width: 100%;
   height: 56px;
   background-color: black;
   color: white;
@@ -108,5 +99,6 @@ const visible = ref(false)
   justify-content: center;
   text-align: center;
   gap: 10px;
+  margin-top: 1rem;
 }
 </style>
