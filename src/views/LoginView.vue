@@ -74,7 +74,7 @@ const visible = ref(false)
   flex-direction: row;
   align-items: baseline;
   justify-content: space-between;
-  gap: 5px
+  gap: 16px;
 }
 
 .header h2{
