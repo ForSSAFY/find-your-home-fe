@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import IndexView from "@/views/IndexView.vue"
+import { RouterView } from 'vue-router';
 </script>
 
 <template>
   <v-layout>
-    <div>
-      <IndexView/> 
-    </div>
+    <router-view></router-view>
   </v-layout>
 </template>
 
