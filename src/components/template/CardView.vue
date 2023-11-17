@@ -1,16 +1,27 @@
 <script setup lang="ts">
-const news = defineProps < { title: string, subtitle: string, imgurl: string }
+const news = defineProps < { title: string, subtitle: string, imgurl: string, href: string }
 >()
 </script>
 
 <template>
-  <v-card class="pa-5">
-    <v-img :src="news.imgurl" cover></v-img>
+  <a :href="href" class="news-card">
+    <v-img height="15rem" :src="news.imgurl" cover></v-img>
 
     <v-card-title> {{ news.title }} </v-card-title>
 
     <v-card-subtitle> {{ news.subtitle }} </v-card-subtitle>
-  </v-card>
+  </a>
 </template>
 
-<style scoped></style>
+<style scoped>
+.news-card{
+  padding: 1rem;
+  color: black;
+  text-decoration: none;
+  transition-duration: 300ms;
+}
+
+.news-card:hover{
+  box-shadow: 0 10px 20px rgb(0,0,0,0.38);
+}
+</style>

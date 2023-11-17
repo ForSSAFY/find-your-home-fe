@@ -4,17 +4,20 @@ const cards = [
   {
     title: '제목1',
     subtitle: '부제목1',
-    imgurl: 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg'
+    imgurl: 'https://imgnews.pstatic.net/image/015/2023/11/17/0004915131_001_20231117082301050.jpg?type=w647',
+    href : "https://n.news.naver.com/article/015/0004915131"
   },
   {
     title: '제목2',
     subtitle: '부제목2',
-    imgurl: 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg'
+    imgurl: 'https://imgnews.pstatic.net/image/023/2023/11/17/0003799646_001_20231117030316203.jpg?type=w647',
+    href : "https://n.news.naver.com/article/015/0004915131"
   },
   {
     title: '제목3',
     subtitle: '부제목3',
-    imgurl: 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg'
+    imgurl: 'https://imgnews.pstatic.net/image/015/2023/11/17/0004915131_001_20231117082301050.jpg?type=w647',
+    href : "https://n.news.naver.com/article/015/0004915131"
   }
 ]
 const notices = [
@@ -58,7 +61,7 @@ const notices = [
           </div>
         </div>
         <div class="main-news-detail">
-          <CardView v-for="c in cards" v-bind="c" :key="c.title" class="main-news-detail-card" />
+          <CardView v-for="c in cards" v-bind="c" :key="c.title"/>
         </div>
       </div>
       <div class="main-notice">
@@ -141,10 +144,12 @@ video {
 /* 두번째 화면 시작 */
 .next-screen {
   max-width: 1200px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   text-align: center;
+  padding: 0 1rem;
   margin: 0 auto;
 }
 
@@ -154,13 +159,14 @@ video {
   flex-direction: row;
   align-items: baseline;
   justify-content: space-between;
-  gap: 5px
+  gap: 16px;
+  margin-bottom: 2rem;
 }
 
 .header h2{
-  text-align: left;
   font-weight: 700;
   font-size: 32px;
+  line-height: 1;
 }
 
 .header-more-box{
@@ -173,20 +179,13 @@ video {
   text-align: right;
   font-weight: 600;
   font-size: 20px;
-  margin: 5px;
 }
 
 /* 뉴스 화면 */
 .main-news-detail {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  margin: 2vh 0;
-  gap: 10px;
-}
-
-.main-news-detail-card {
-  margin-left: 1vh;
-  margin-bottom: 1vh;
+  margin: 0 -1rem;
 }
 
 /* 공지사항 화면 */

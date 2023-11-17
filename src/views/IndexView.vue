@@ -5,18 +5,13 @@ import FooterView from '@/components/layout/FooterView.vue'
 
 <template>
   <HeaderView />
-  <div class="wrapper">
+  <div>
     <router-view></router-view>
   </div>
   <FooterView class="footer" />
 </template>
 
 <style scoped>
-.wrapper {
-  height: auto;
-  min-height: 96vh;
-
-}
 .footer {
   height: 2vh;
   position: relative;
