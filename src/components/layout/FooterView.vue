@@ -10,4 +10,8 @@
 </template>
 
 <style scoped>
+footer{
+  font-weight: 600;
+  font-size: 20px;
+}
 </style>

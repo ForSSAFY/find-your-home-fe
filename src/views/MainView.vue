@@ -1,49 +1,76 @@
 <script lang="ts" setup>
-import CardView from "@/components/template/CardView.vue"
+import CardView from '@/components/template/CardView.vue'
 const cards = [
-  { title: '제목1', subtitle: '부제목1', imgurl: 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg' },
-  { title: '제목2', subtitle: '부제목2', imgurl: 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg' },
-  { title: '제목3', subtitle: '부제목3', imgurl: 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg' },
-  { title: '제목4', subtitle: '부제목4', imgurl: 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg' }
+  {
+    title: '제목1',
+    subtitle: '부제목1',
+    imgurl: 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg'
+  },
+  {
+    title: '제목2',
+    subtitle: '부제목2',
+    imgurl: 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg'
+  },
+  {
+    title: '제목3',
+    subtitle: '부제목3',
+    imgurl: 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg'
+  }
 ]
 const notices = [
-  { title: '[공지] Find your house 개인정보처리방침 (2023/09/21) 개정안내' },
-  { title: '[공지] Find your house 개인정보처리방침 (2023/08/21) 개정안내' },
-  { title: '[공지] Find your house 개인정보처리방침 (2023/07/21) 개정안내' },
-  { title: '[공지] Find your house 개인정보처리방침 (2023/06/21) 개정안내' },
+  { date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/09/21) 개정안내' },
+  { date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/08/21) 개정안내' },
+  { date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/07/21) 개정안내' },
+  { date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/06/21) 개정안내' }
 ]
 </script>
 <template>
   <v-main>
-    <div class="initial-screen">
-      <div class="main-video">
-        <video src="\src\assets\cityview.mp4" muted loop autoplay playsinline></video>
-        <!-- <img src="\src\assets\sample.jpg" /> -->
-        <div class="main-video-container">
-          <div class="main-video-text">
-            <h1>Find Your Home</h1>
-            <p>우리는 당신이 편하게 쉴 수 있는 집을 찾아 주고 싶습니다.</p>
-            <br />
-          </div>
-          <div class="main-video-search pa-2">
-            <v-text-field  class="main-search-input ma-0 pa-0" variant="solo" placeholder="검색어를 입력해주세요" hide-details flat></v-text-field>
-            <v-btn icon :elevation="0"><svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"/><path d="M13 4.069V2h-2v2.069A8.01 8.01 0 0 0 4.069 11H2v2h2.069A8.008 8.008 0 0 0 11 19.931V22h2v-2.069A8.007 8.007 0 0 0 19.931 13H22v-2h-2.069A8.008 8.008 0 0 0 13 4.069zM12 18c-3.309 0-6-2.691-6-6s2.691-6 6-6 6 2.691 6 6-2.691 6-6 6z"/></svg></v-btn>
-            <v-btn>검색</v-btn>
-          </div>
+    <div class="main-video">
+      <video src="\src\assets\cityview.mp4" muted loop autoplay playsinline></video>
+      <!-- <img src="\src\assets\sample.jpg" /> -->
+      <div class="main-video-container">
+        <div class="main-video-text">
+          <h1>Find Your Home</h1>
+          <p>우리는 당신이 편하게 쉴 수 있는 집을 찾아 주고 싶습니다.</p>
+          <br/>
+        </div>
+        <div class="main-video-search pa-2">
+          <v-text-field
+            class="main-search-input ma-0 pa-0"
+            variant="solo"
+            placeholder="검색어를 입력해주세요"
+            hide-details
+            flat
+          ></v-text-field>
+          <v-btn icon="my_location" :elevation="0"></v-btn>
+          <v-btn rounded="0" class="main-search-button">검색</v-btn>
         </div>
       </div>
     </div>
+
     <div class="next-screen">
       <div class="main-news">
-        <h2>부동산 뉴스</h2>
+        <div class="header">
+          <h2>뉴스</h2>
+          <div class="header-more-box">
+            <p class="header-more">더보기<v-icon icon="add"></v-icon></p>
+          </div>
+        </div>
         <div class="main-news-detail">
-          <CardView v-for="c in cards" v-bind="c" :key="c.title" class="main-news-detail-card"/>
+          <CardView v-for="c in cards" v-bind="c" :key="c.title" class="main-news-detail-card" />
         </div>
       </div>
       <div class="main-notice">
-        <h2>공지 사항</h2>
+        <div class="header">
+          <h2>공지사항</h2>
+          <div class="header-more-box">
+            <p class="header-more">더보기<v-icon icon="add"></v-icon></p>
+          </div>
+        </div>
         <table>
           <tr v-for="n in notices" :key="n.title">
+            <td>{{ n.date }}</td>
             <td>{{ n.title }}</td>
           </tr>
         </table>
@@ -54,15 +81,11 @@ const notices = [
 
 <style scoped>
 /* 초기 화면 */
-.initial-screen{
-  height: 100vh;
-}
 .main-video {
   position: relative;
   width: 100vw;
-  height: 55vh;
-  /* overflow-y: hidden; */
-  /* overflow-x: hidden; */
+  height: 450px;
+  margin-bottom: 164px;
 }
 .main-video-text {
   position: absolute;
@@ -71,7 +94,8 @@ const notices = [
   transform: translate(-50%, -50%);
   color: white;
   text-align: center;
-  box-shadow: 1vw;
+  box-shadow: 10px;
+  font-weight: 6000;
 }
 
 video {
@@ -93,53 +117,99 @@ video {
   gap: 0.5rem;
   max-width: 500px;
   width: 100%;
-  border: 1px solid #e2e0dd;
   background-color: white;
-  border-radius: 8px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.37);
 }
 
-.main-search-input{
-  background-color:white;
+.main-search-input {
+  background-color: white;
   border-radius: 8px;
   align-items: center;
   justify-content: center;
+  margin-bottom: 164px;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.main-search-button{
+  background-color: black;
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 /* 두번째 화면 시작 */
-.next-screen{
-  margin: 5vw;
-}
-/* 뉴스 화면 */
-.main-news {
+.next-screen {
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
+  margin: 0 auto;
 }
 
-.main-news-detail{
+/* 뉴스 · 공지사항 헤더*/
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 5px
+}
+
+.header h2{
+  text-align: left;
+  font-weight: 700;
+  font-size: 32px;
+}
+
+.header-more-box{
+  /* (grow, shrink, basis) */
+  flex: 1 0 0; 
+  border-bottom: 2px solid black;
+}
+
+.header-more{
+  text-align: right;
+  font-weight: 600;
+  font-size: 20px;
+  
+}
+
+/* 뉴스 화면 */
+.main-news-detail {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  max-width: 1000px;
-  margin: 2vh auto;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin: 2vh 0;
+  gap: 10px;
 }
 
-.main-news-detail-card{
-  margin-left:1vh;
-  margin-bottom:1vh;
+.main-news-detail-card {
+  margin-left: 1vh;
+  margin-bottom: 1vh;
 }
 
 /* 공지사항 화면 */
 .main-notice {
-  margin-top: 10%;
   text-align: center;
+  margin: 100px 0;
 }
 
 .main-notice table {
+  width: 100%;
+  border-collapse: collapse;
+  font-weight: 500;
+  font-size: 20px;
+}
+
+.main-notice table tr{
   margin-top: 10%;
-  text-align: center;
-  margin: 0 auto;
+  padding: 1vh;
+  text-align: left;
 }
 .main-notice table tr td {
   margin-top: 10%;
-  text-align: center;
-  padding: 1vh;
+  padding: 20px;
+  border-bottom: 2px solid black;
 }
 </style>

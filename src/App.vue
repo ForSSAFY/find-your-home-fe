@@ -10,6 +10,8 @@ import IndexView from "@/views/IndexView.vue"
   </v-layout>
 </template>
 
-<style scoped>
-
+<style>
+html>body{
+  font-family: 'Pretendard Variable';
+}
 </style>
