@@ -85,7 +85,7 @@ const notices = [
   position: relative;
   width: 100vw;
   height: 450px;
-  margin-bottom: 164px;
+  margin-bottom: 165px;
 }
 .main-video-text {
   position: absolute;
@@ -95,7 +95,7 @@ const notices = [
   color: white;
   text-align: center;
   box-shadow: 10px;
-  font-weight: 6000;
+  font-weight: 600;
 }
 
 video {
@@ -134,7 +134,7 @@ video {
 .main-search-button{
   background-color: black;
   color: white;
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 700;
 }
 
@@ -173,7 +173,7 @@ video {
   text-align: right;
   font-weight: 600;
   font-size: 20px;
-  
+  margin: 5px;
 }
 
 /* 뉴스 화면 */
