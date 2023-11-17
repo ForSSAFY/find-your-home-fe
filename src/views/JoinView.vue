@@ -43,128 +43,118 @@ const visible = ref(false)
 </script>
 
 <template>
-  <v-main>
-    <div class="container">
-      <form class="join-form">
-        <div class="join-form-inner">
-          <div class="header">
-            <h2>회원가입</h2>
-            <div class="header-line"></div>
-          </div>
+  <v-main class="container">
+    <form class="join-form">
+      <header class="header">
+        <h2>회원가입</h2>
+        <div class="header-line"></div>
+      </header>
 
-          <div class="font-label">아이디</div>
-          <div class="join-form-button">
-            <v-text-field
-              :error-messages="v$.id.$errors.map((e) => '아이디를 입력하세요.')"
-              v-model="state.id"
-              placeholder="아이디"
-              variant="outlined"
-              required
-              @input="v$.id.$touch"
-              @blur="v$.id.$touch"
-            ></v-text-field>
-            <v-btn rounded="0" class="duplicate-check-button">중복확인</v-btn>
-          </div>
+      <label class="font-label">아이디</label>
+      <div class="join-form-row">
+        <v-text-field
+          rounded="0"
+          :error-messages="v$.id.$errors.map((e) => '아이디를 입력하세요.')"
+          v-model="state.id"
+          placeholder="아이디"
+          variant="outlined"
+          required
+          @input="v$.id.$touch"
+          @blur="v$.id.$touch"
+        ></v-text-field>
+        <v-btn rounded="0" class="duplicate-check-button">중복확인</v-btn>
+      </div>
 
-          <div class="font-label">닉네임</div>
-          <div class="join-form-button">
-            <v-text-field
-              :counter="8"
-              :error-messages="v$.nickname.$errors.map((e) => '닉네임을 입력하세요.')"
-              v-model="state.nickname"
-              variant="outlined"
-              placeholder="닉네임"
-              required
-              @input="v$.nickname.$touch"
-              @blur="v$.nickname.$touch"
-            ></v-text-field>
-            <v-btn class="none-button" disabled>중복확인</v-btn>
-          </div>
+      <label class="font-label">닉네임</label>
+      <div class="join-form-row">
+        <v-text-field
+          rounded="0"
+          :counter="8"
+          :error-messages="v$.nickname.$errors.map((e) => '닉네임을 입력하세요.')"
+          v-model="state.nickname"
+          variant="outlined"
+          placeholder="닉네임"
+          required
+          @input="v$.nickname.$touch"
+          @blur="v$.nickname.$touch"
+        ></v-text-field>
+        <v-btn rounded="0" class="duplicate-check-button none-button" disabled>중복확인</v-btn>
+      </div>
 
-          <div class="font-label">비밀번호</div>
-          <div class="join-form-button">
-            <v-text-field
-              :error-messages="v$.password.$errors.map((e) => '비밀번호를 입력하세요.')"
-              :append-inner-icon="visible ? 'visibility_off' : 'visibility'"
-              :type="visible ? 'text' : 'password'"
-              v-model="state.password"
-              placeholder="비밀번호"
-              variant="outlined"
-              required
-              @input="v$.password.$touch"
-              @blur="v$.password.$touch"
-              @click:append-inner="visible = !visible"
-            ></v-text-field>
-            <v-btn class="none-button" disabled>중복확인</v-btn>
-          </div>
+      <label class="font-label">비밀번호</label>
+      <div class="join-form-row">
+        <v-text-field
+          rounded="0"
+          :error-messages="v$.password.$errors.map((e) => '비밀번호를 입력하세요.')"
+          :append-inner-icon="visible ? 'visibility_off' : 'visibility'"
+          :type="visible ? 'text' : 'password'"
+          v-model="state.password"
+          placeholder="비밀번호"
+          variant="outlined"
+          required
+          @input="v$.password.$touch"
+          @blur="v$.password.$touch"
+          @click:append-inner="visible = !visible"
+        ></v-text-field>
+        <v-btn rounded="0" class="duplicate-check-button none-button" disabled>중복확인</v-btn>
+      </div>
 
-          <div class="join-form-button">
-            <v-text-field
-              v-model="state.passwordchk"
-              placeholder="비밀번호 확인"
-              variant="outlined"
-              required
-              :error-messages="v$.passwordchk.$errors.map((e) => '비밀번호 확인을입력하세요.')"
-              @input="v$.passwordchk.$touch"
-              @blur="v$.passwordchk.$touch"
-            ></v-text-field>
-            <v-btn class="none-button" disabled> 중복확인 </v-btn>
-          </div>
-          <div class="buttons">
-            <v-btn rounded="0" variant="outlined" class="reset-button" @click="clear">초기화</v-btn>
-            <router-link to="/"
-              ><v-btn rounded="0" class="join-button" @click="v$.$validate"
-                >가입하기</v-btn
-              ></router-link
-            >
-          </div>
-        </div>
-      </form>
-    </div>
+      <div class="join-form-row">
+        <v-text-field
+          rounded="0"
+          v-model="state.passwordchk"
+          placeholder="비밀번호 확인"
+          variant="outlined"
+          required
+          :error-messages="v$.passwordchk.$errors.map((e) => '비밀번호 확인을입력하세요.')"
+          @input="v$.passwordchk.$touch"
+          @blur="v$.passwordchk.$touch"
+        ></v-text-field>
+        <v-btn rounded="0" class="duplicate-check-button none-button" disabled>중복확인</v-btn>
+      </div>
+      <div class="buttons">
+        <v-btn rounded="0" variant="outlined" class="reset-button" @click="clear">초기화</v-btn>
+        <v-btn rounded="0" class="join-button" @click="v$.$validate">가입하기</v-btn>
+      </div>
+    </form>
   </v-main>
 </template>
 <style scoped>
 .container {
-  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
 }
 
 .join-form {
-  width: 800px;
-  height: 600px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  max-width: 800px;
+  width: 100%;
+  padding: 64px;
   box-shadow: 0px 10px 20px rgb(0, 0, 0, 0.38);
 }
 
-.join-form-inner {
-  width: 650px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.join-form-button {
+.join-form-row {
   display: flex;
   justify-content: space-between;
-  gap: 30px;
+  gap: 16px;
 }
 
 .duplicate-check-button {
-  width: 110px;
+  padding-left: 2rem;
+  padding-right: 2rem;
   height: 56px;
   background-color: black;
   color: white;
 }
 
 .none-button {
-  width: 110px;
   visibility: hidden;
 }
 
-.font-label{
+.font-label {
   font-size: 16px;
   font-weight: 700;
 }
@@ -176,13 +166,13 @@ const visible = ref(false)
   align-items: baseline;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 2rem;
 }
 
 .header h2 {
-  text-align: left;
   font-weight: 700;
   font-size: 40px;
+  line-height: 1;
 }
 
 .header-line {
@@ -191,16 +181,16 @@ const visible = ref(false)
 }
 
 .buttons {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
 }
 
 .reset-button {
-  width: 222px;
   height: 56px;
 }
 .join-button {
-  width: 222px;
   height: 56px;
   background-color: black;
   color: white;

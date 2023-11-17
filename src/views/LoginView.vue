@@ -8,21 +8,22 @@ const visible = ref(false)
   <v-main>
     <div class="container">
       <v-card class="login-form" elevation="8" rounded="0">
-        <div class = "login-form-inner">
+        <div class="login-form-inner">
           <div class="header mb-3">
             <h2>로그인</h2>
-            <div class="header-line">
-            </div>
+            <div class="header-line"></div>
           </div>
-  
+
           <v-text-field
+            rounded="0"
             density="comfortable"
             placeholder="아이디"
             prepend-inner-icon="person"
             variant="outlined"
           ></v-text-field>
-  
+
           <v-text-field
+            rounded="0"
             :append-inner-icon="visible ? 'visibility_off' : 'visibility'"
             :type="visible ? 'text' : 'password'"
             density="comfortable"
@@ -31,9 +32,9 @@ const visible = ref(false)
             variant="outlined"
             @click:append-inner="visible = !visible"
           ></v-text-field>
-  
+
           <v-btn class="login-button" rounded="0">로그인</v-btn>
-  
+
           <v-card-text class="find_wrap">
             <router-link to="/join" class="text-decoration-none">아이디 찾기</router-link>
             <v-divider inset vertical></v-divider>
@@ -51,7 +52,7 @@ const visible = ref(false)
 .container {
   width: 100vw;
 }
-.login-form{
+.login-form {
   width: 800px;
   height: 600px;
   position: absolute;
@@ -61,7 +62,7 @@ const visible = ref(false)
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.37);
 }
 
-.login-form-inner{
+.login-form-inner {
   width: 580px;
   position: absolute;
   top: 50%;
@@ -77,19 +78,19 @@ const visible = ref(false)
   gap: 16px;
 }
 
-.header h2{
+.header h2 {
   text-align: left;
   font-weight: 700;
   font-size: 40px;
 }
 
-.header-line{
+.header-line {
   /* (grow, shrink, basis) */
-  flex: 1 0 0; 
+  flex: 1 0 0;
   border-bottom: 2px solid black;
 }
 
-.v-divider{
+.v-divider {
   height: 16px;
   background-color: black;
 }
