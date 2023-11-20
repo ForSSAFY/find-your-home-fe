@@ -49,7 +49,10 @@ const currentPosition = () => {
 const search = () => {
   if (searchWord.value == "현재 위치") {
     router.push({name : 'map', query:{lat: lat.value, lng : lng.value}})
-  } else {
+  } else if (searchWord.value == "") {
+    alert("검색어를 입력해주세요")
+  }
+  else {
     router.push({name : 'search',query:{query : searchWord.value} })
   }
 }
