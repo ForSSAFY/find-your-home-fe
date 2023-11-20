@@ -153,8 +153,8 @@ const visible = ref(false)
 }
 
 .join-form-row {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 100px;
   gap: 16px;
 }
 
