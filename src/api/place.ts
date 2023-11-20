@@ -1,31 +1,50 @@
 import { localAxios } from '@/utils/http-commons'
 
-interface AptsReq {
-  minLat: number
-  minLng: number
-  maxLat: number
-  maxLng: number
-}
-
+/** 기본 마커 정보 */
 export interface Apt {
   id: string
   lat: number
   lng: number
   name: string
+  price: number
+  area: number
 }
 
 export type AptsRes = Apt[]
 
-export interface SiDoGun {
+export interface Sidogun {
   id: string
   lat: number
   lng: number
   name: string
+  cnt: number
 }
 
 export type SidogunRes = {
-  result: SiDoGun[]
+  result: Sidogun[]
   level: number
+}
+
+export interface AptInfo {
+  id: string
+  buildYear: number
+  // roadName: string
+  // roadNameBonbun: string
+  // roadNameBubun: string
+  // roadNameSeq: string
+  // roadNameBasementCode: string
+  // roadNameCode: string
+  dong: string
+  bonbun: string
+  bubun: string
+  sigunguCode: string
+  eubmyundongCode: string
+  dongCode: string
+  landCode: string
+  apartmentName: string
+  jibun: string
+  lat: number
+  lng: number
 }
 
 const axios = localAxios()
@@ -65,4 +84,45 @@ export function getSidogunInArea(
     params: { minLat, minLng, maxLat, maxLng, level },
     signal: controller_getSidogunInArea.signal
   })
+}
+
+/**
+ * @param code 동코드
+ */
+export function getSidogun(code: string) {
+  // TODO
+}
+
+export function getAptInfo(id: string): AptInfo {
+  // TODO
+}
+
+export type Nearby =
+  | {
+      type: 'store' | 'park' | 'charger'
+      minutes: number
+    }
+  | {
+      type: 'subway'
+      name: string
+      minutes: number
+    }
+
+export type Deal = {
+  date: string
+  name: string
+  price: number
+  dong: number
+  floor: number
+}
+
+export interface AptInfo {
+  id: string
+  name: string
+  address: string
+  date: string
+  area: number
+  price: number
+  nearby: Nearby[]
+  deals: Deal[]
 }

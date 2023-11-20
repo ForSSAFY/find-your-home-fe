@@ -13,7 +13,7 @@ html {
   overflow-y: auto !important;
 }
 
-html > body {
+html>body {
   font-family: 'Pretendard Variable';
 }
 </style>

@@ -2,10 +2,10 @@
 import { getAptsInArea, getSidogunInArea } from '@/api/place'
 import CustomMarkers from '@/components/CustomMarkers.vue'
 import { debounce } from '@/utils/debounce'
-import { ref, shallowRef, watch, type Ref } from 'vue'
+import { provide } from 'vue'
+import { ref, shallowRef, watch } from 'vue'
 import {
   KakaoMap,
-  Marker,
   ZoomControl,
   useKakaoLoader,
   type LatLng,
@@ -17,6 +17,44 @@ useKakaoLoader({ appKey: import.meta.env.VITE_KAKAO_JAVASCRIPT_APP_KEY, librarie
 
 const route = useRoute()
 const router = useRouter()
+
+// ========== 지도 상태 변동하는 변수들 ==========
+const signalCenter = shallowRef<LatLng>({
+  lat: Number(route.query.lat ?? 37.5013),
+  lng: Number(route.query.lng ?? 127.0395)
+})
+function setCenter(center: LatLng) {
+  signalCenter.value = center;
+}
+const signalLevel = ref(Number(route.query.level ?? 4))
+function setLevel(level: number) {
+  signalLevel.value = level
+}
+const bounds = shallowRef<LatLngBounds>({ ne: { lat: 0, lng: 0 }, sw: { lat: 0, lng: 0 } })
+function updateMarkers() {
+  if (level.value <= 4) {
+    getAptsInArea(...flatLatLngBounds(bounds.value), level.value)
+      .then((res) => (markers.value = res.data))
+      .catch(() => (markers.value = []))
+  } else {
+    getSidogunInArea(...flatLatLngBounds(bounds.value), level.value)
+      .then((res) => (markers.value = res.data.result.map(item => ({ ...item, level: res.data.level }))))
+      .catch(() => (markers.value = []))
+  }
+}
+// CustomMarkers hover 상태
+const selectedId = ref(0);
+provide('mapView', { signalCenter, setCenter, signalLevel, setLevel, bounds, updateMarkers, selectedId })
+
+// ========== 경로 접속 시 URL로부터 지도 위치 설정 ==========
+// index: 자동으로 설정
+// apt: router-view에서 설정
+// search: router-view에서 설정
+
+// ==========  ==========
+// ==========  ==========
+// ==========  ==========
+// ==========  ==========
 
 // ---------- 현재 지도 위치와 경로 동기화 ----------
 const inputCenter = shallowRef({
@@ -68,7 +106,7 @@ const updateApts = (bounds: LatLngBounds) => {
 }
 
 // 현재 화면 범위 추적
-const bounds = ref<LatLngBounds>({ ne: { lat: 0, lng: 0 }, sw: { lat: 0, lng: 0 } })
+// const bounds = ref<LatLngBounds>({ ne: { lat: 0, lng: 0 }, sw: { lat: 0, lng: 0 } })
 const debouncedBounds = ref(bounds.value)
 // 일정 시간 동안 bounds 변화 없을 때 debouncedBounds 업데이트
 const updateDebouncedBounds = debounce((bounds) => (debouncedBounds.value = bounds), 200)
@@ -125,13 +163,17 @@ function onMarkerClick({ lat, lng, level: lv }: { lat: number, lng: number, leve
       </div>
     </v-app-bar>
     <!-- Sidebar -->
-    <v-navigation-drawer :width="384">
-      <div class="pa-5">
-        <v-text-field density="compact" variant="outlined" label="동, 지하철, 아파트 검색" append-inner-icon="search" rounded="0"
-          single-line hide-details @click:append-inner="(e) => console.log('검색 안돼~')">
-        </v-text-field>
+    <v-navigation-drawer permanent :width="384">
+      <div class="sidebar-container">
+        <nav class="apt-search">
+          <v-text-field density="compact" variant="outlined" label="동, 지하철, 아파트 검색" append-inner-icon="search" rounded="0"
+            single-line hide-details class="ma-6" @click:append-inner="(e) => console.log('검색 안돼~')">
+          </v-text-field>
+          <v-divider />
+        </nav>
+
+        <router-view />
       </div>
-      <v-divider />
     </v-navigation-drawer>
     <!-- Main -->
     <v-main style="height: 100%">
@@ -149,8 +191,11 @@ function onMarkerClick({ lat, lng, level: lv }: { lat: number, lng: number, leve
 </template>
 
 <style scoped>
-.wrapper {
+.sidebar-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: min-content auto;
+  height: 100%;
+  max-height: 100%;
+  overflow-y: hidden;
 }
 </style>
