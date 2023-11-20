@@ -34,9 +34,9 @@ const visible = ref(false)
       <v-btn class="login-button" rounded="0">로그인</v-btn>
 
       <div class="find_wrap">
-        <router-link to="/join" class="text-decoration-none">아이디 찾기</router-link>
+        <router-link to="/find-id" class="text-decoration-none">아이디 찾기</router-link>
         <v-divider inset vertical></v-divider>
-        <router-link to="/join" class="text-decoration-none">비밀번호 찾기</router-link>
+        <router-link to="/find-pw" class="text-decoration-none">비밀번호 찾기</router-link>
         <v-divider inset vertical></v-divider>
         <router-link to="/join" class="text-decoration-none">회원 가입</router-link>
       </div>

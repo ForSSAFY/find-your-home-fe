@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref} from 'vue'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 
@@ -65,6 +65,22 @@ const visible = ref(false)
         <v-btn rounded="0" class="duplicate-check-button">중복확인</v-btn>
       </div>
 
+      <label class="font-label">이메일</label>
+      <div class="join-form-row">
+        <v-text-field
+          rounded="0"
+          :counter="8"
+          :error-messages="v$.nickname.$errors.map((e) => '이메일을 입력하세요.')"
+          v-model="state.nickname"
+          variant="outlined"
+          placeholder="이메일"
+          required
+          @input="v$.nickname.$touch"
+          @blur="v$.nickname.$touch"
+        ></v-text-field>
+        <v-btn rounded="0" class="duplicate-check-button">이메일 인증</v-btn>
+      </div>
+
       <label class="font-label">닉네임</label>
       <div class="join-form-row">
         <v-text-field
@@ -106,7 +122,7 @@ const visible = ref(false)
           placeholder="비밀번호 확인"
           variant="outlined"
           required
-          :error-messages="v$.passwordchk.$errors.map((e) => '비밀번호 확인을입력하세요.')"
+          :error-messages="v$.passwordchk.$errors.map((e) => '비밀번호를 한번 더 입력하세요.')"
           @input="v$.passwordchk.$touch"
           @blur="v$.passwordchk.$touch"
         ></v-text-field>

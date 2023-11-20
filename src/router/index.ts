@@ -54,6 +54,26 @@ const router = createRouter({
       name: 'join',
       component: () => import('@/views/JoinView.vue')
     },
+    {
+      path: '/find-id',
+      name: 'find-id',
+      component: () => import('@/views/FindIdView.vue'),
+    },
+    {
+      path: '/find-id/complete',
+      name: 'find-id-complete',
+      component: () => import('@/views/FindIdCompleteView.vue'),
+    },
+    {
+      path: '/find-pw',
+      name: 'find-pw',
+      component: () => import('@/views/FindPasswordView.vue'),
+    },
+    {
+      path: '/find-pw/complete',
+      name: 'find-pw-complete',
+      component: () => import('@/views/FindPasswordCompleteView.vue'),
+    },
   ]
 })
 
