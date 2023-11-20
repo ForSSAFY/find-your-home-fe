@@ -1,5 +1,13 @@
 <script lang="ts" setup>
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import CardView from '@/components/template/CardView.vue'
+
+const router = useRouter();
+const searchWord = ref('');
+const lat = ref(0);
+const lng = ref(0);
+
 const cards = [
   {
     title: '제목1',
@@ -26,6 +34,25 @@ const notices = [
   { date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/07/21) 개정안내' },
   { date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/06/21) 개정안내' }
 ]
+
+/* 현재 위치 get*/
+const currentPosition = () => {
+  navigator.geolocation.getCurrentPosition((position) => {
+    lat.value = position.coords.latitude
+    lng.value = position.coords.longitude
+    searchWord.value = "현재 위치"
+    console.log(lat.value, lng.value)
+  })
+}
+
+/* 검색 */
+const search = () => {
+  if (searchWord.value == "현재 위치") {
+    router.push({name : 'map', query:{lat: lat.value, lng : lng.value}})
+  } else {
+    router.push({name : 'search',query:{query : searchWord.value} })
+  }
+}
 </script>
 <template>
   <v-main>
@@ -45,9 +72,11 @@ const notices = [
             placeholder="검색어를 입력해주세요"
             hide-details
             flat
+            :model-value="searchWord"
+            @update:model-value="newValue => searchWord = newValue"
           ></v-text-field>
-          <v-btn icon="my_location" :elevation="0"></v-btn>
-          <v-btn rounded="0" class="main-search-button">검색</v-btn>
+          <v-btn icon="my_location" :elevation="0" @click="currentPosition()"></v-btn>
+          <v-btn rounded="0" class="main-search-button" @click="search()">검색</v-btn>
         </div>
       </div>
     </div>
@@ -160,7 +189,7 @@ video {
   align-items: baseline;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .header h2{
