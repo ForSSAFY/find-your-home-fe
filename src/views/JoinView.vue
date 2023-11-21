@@ -1,8 +1,11 @@
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive, computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useVuelidate } from '@vuelidate/core'
-import { required, email, minLength, maxLength, sameAs } from '@vuelidate/validators'
-import { helpers } from 'vuelidate/lib/validators'
+import { required, email, minLength, maxLength, sameAs, helpers, alphaNum } from '@vuelidate/validators'
+
+//라우터
+const router = useRouter()
 
 //props 역할
 interface State {
@@ -25,12 +28,38 @@ const state = reactive<State>({
   ...initialState
 })
 
+const regexId = helpers.regex(/^[a-z]+[a-z0-9]{6,12}$/g);
+const regexPass = helpers.regex(/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,20}$/);
+
 const rules = {
-  id: { required, minLength:minLength(6), maxLength: maxLength(12)},
-  nickname: {required, minLength:minLength(2), maxLength: maxLength(12)},
-  email: { required, email },
-  password: { required, minLength:minLength(8), maxLength: maxLength(20)},
-  passwordchk: { required, sameAsPassword:sameAs('password') }
+  id: {
+    required: helpers.withMessage('아이디를 입력해주세요', required),
+    minLength: helpers.withMessage('아이디 최소 길이는 6글자입니다.', minLength(6)),
+    maxLength: helpers.withMessage('아이디 최대 길이는 12글자입니다.', maxLength(12)),
+    regexId : helpers.withMessage('아이디는 8~16자의 영소문자 및 숫자만 가능합니다.',regexId)
+  },
+  nickname: {
+    required: helpers.withMessage('닉네임을 입력해주세요', required),
+    minLength: helpers.withMessage('아이디 최소 길이는 2글자입니다.', minLength(2)),
+    maxLength: helpers.withMessage('아이디 최소 길이는 12글자입니다.', minLength(12))
+  },
+  email: {
+    required: helpers.withMessage('이메일을 입력해주세요', required),
+    email: helpers.withMessage('이메일 형식이 올바르지 않습니다', email)
+  },
+  password: {
+    required: helpers.withMessage('패스워드를 입력해주세요', required),
+    minLength: helpers.withMessage('비밀번호 최소 길이는 8글자입니다.', minLength(8)),
+    maxLength: helpers.withMessage('비밀번호 최대 길이는 20글자입니다.', maxLength(20)),
+    regexPass: helpers.withMessage('비밀번호는 8~20자의 영대소문자, 숫자 하나씩 포함해야합니다.',regexPass)
+  },
+  passwordchk: {
+    required: helpers.withMessage('패스워드 확인을 입력해주세요', required),
+    sameAsPassword: helpers.withMessage(
+      '비밀번호가 일치하지 않습니다',
+      sameAs(computed(() => state.password))
+    )
+  }
 }
 
 const v$ = useVuelidate(rules, state)
@@ -41,6 +70,12 @@ function clear() {
   for (const [key, value] of Object.entries(initialState)) {
     state[key] = value
   }
+}
+
+const submit = async () => {
+  const isFormCorrect = await v$.value.$validate()
+  if (!isFormCorrect) return
+  router.push({ name: 'login' })
 }
 
 const visible = ref(false)
@@ -57,11 +92,12 @@ const visible = ref(false)
       <label class="font-label">아이디</label>
       <div class="join-form-row">
         <v-text-field
-        v-model="state.id"
-        placeholder="아이디"
-        hint="아이디는 6 ~ 12자의 영문,숫자만 사용가능합니다."
-        variant="outlined"
-        rounded="0"
+          :error-messages="v$.id.$errors.map((e) => e.$message)"
+          v-model="state.id"
+          placeholder="아이디"
+          hint="아이디는 6 ~ 12자의 영문,숫자만 사용가능합니다."
+          variant="outlined"
+          rounded="0"
           required
           @input="v$.id.$touch"
           @blur="v$.id.$touch"
@@ -72,7 +108,7 @@ const visible = ref(false)
       <label class="font-label">이메일</label>
       <div class="join-form-row">
         <v-text-field
-          :error-messages="v$.email.$errors.map((e) => '이메일을 입력하세요.')"
+          :error-messages="v$.email.$errors.map((e) => e.$message)"
           v-model="state.email"
           placeholder="이메일"
           variant="outlined"
@@ -87,7 +123,7 @@ const visible = ref(false)
       <label class="font-label">닉네임</label>
       <div class="join-form-row">
         <v-text-field
-          :error-messages="v$.nickname.$errors.map((e) => '닉네임을 입력하세요.')"
+          :error-messages="v$.nickname.$errors.map((e) => e.$message)"
           v-model="state.nickname"
           placeholder="닉네임"
           rounded="0"
@@ -102,7 +138,7 @@ const visible = ref(false)
       <label class="font-label">비밀번호</label>
       <div class="join-form-row">
         <v-text-field
-          :error-messages="v$.password.$errors.map((e) => '비밀번호를 입력하세요.')"
+          :error-messages="v$.password.$errors.map((e) => e.$message)"
           :append-inner-icon="visible ? 'visibility_off' : 'visibility'"
           :type="visible ? 'text' : 'password'"
           v-model="state.password"
@@ -133,8 +169,8 @@ const visible = ref(false)
         <v-btn rounded="0" class="duplicate-check-button none-button" disabled>중복확인</v-btn>
       </div>
       <div class="buttons">
-        <v-btn rounded="0" variant="outlined" class="reset-button" @click="clear">초기화</v-btn>
-        <v-btn rounded="0" class="join-button" @click="v$.$validate">가입하기</v-btn>
+        <v-btn rounded="0" variant="outlined" class="reset-button" @click="clear()">초기화</v-btn>
+        <v-btn rounded="0" class="join-button" @click="submit()">가입하기</v-btn>
       </div>
     </form>
   </v-main>

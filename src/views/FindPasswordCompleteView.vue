@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useVuelidate } from '@vuelidate/core'
-import { required, minLength, maxLength, sameAs } from '@vuelidate/validators'
+import { required, minLength, maxLength, sameAs, helpers } from '@vuelidate/validators'
 
 //라우터 받기
 const router = useRouter()
+const regexPass = helpers.regex(/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,20}$/)
+
 
 //props 역할
 interface State {
@@ -23,20 +25,30 @@ const state = reactive<State>({
 })
 
 const rules = {
-  password: { required, minLength: minLength(8), maxLength: maxLength(20) },
-  passwordchk: { required, sameAsPassword: sameAs(() => state.password, "비밀번호가 일치하지 않습니다.") },
+  password: {
+    required: helpers.withMessage('패스워드를 입력해주세요', required),
+    minLength: helpers.withMessage('비밀번호 최소 길이는 8글자입니다.', minLength(8)),
+    maxLength: helpers.withMessage('비밀번호 최대 길이는 20글자입니다.', maxLength(20)),
+    regexPass: helpers.withMessage('비밀번호는 8~20자의 영대소문자, 숫자 하나씩 포함해야합니다.',regexPass)
+  },
+  passwordchk: {
+    required: helpers.withMessage('패스워드 확인을 입력해주세요', required),
+    sameAsPassword: helpers.withMessage(
+      '비밀번호가 일치하지 않습니다',
+      sameAs(computed(() => state.password))
+    )
+  }
 }
 
 const v$ = useVuelidate(rules, state)
 
 function clear() {
   v$.value.$reset()
-  
+
   for (const [key, value] of Object.entries(initialState)) {
     state[key] = value
   }
 }
-console.log(state.password, state.passwordchk);
 
 const login = async () => {
   const isFormCorrect = await v$.value.$validate()
@@ -52,9 +64,9 @@ const login = async () => {
         <h2>비밀번호 찾기</h2>
         <div class="header-line"></div>
       </header>
-      <div class="font-label">새로운 비밀번호를 입력해 주세요.</div>
+      <div class="font-label">새로운 비밀번호를 입력해주세요.</div>
       <v-text-field
-        :error-messages="v$.password.$errors.map((e) => '비밀번호를 입력하세요.')"
+        :error-messages="v$.password.$errors.map((e) => e.$message)"
         v-model="state.password"
         rounded="0"
         variant="outlined"

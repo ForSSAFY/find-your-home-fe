@@ -2,7 +2,7 @@
 import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { useVuelidate } from '@vuelidate/core'
-import { required, email } from '@vuelidate/validators'
+import { required, email, helpers } from '@vuelidate/validators'
 
 const router = useRouter()
 
@@ -21,8 +21,11 @@ const state = reactive<State>({
 })
 
 const rules = {
-  nickname: { required },
-  email: { required, email }
+  nickname: { required: helpers.withMessage('닉네임을 입력해주세요', required) },
+  email: {
+    required: helpers.withMessage('이메일을 입력해주세요', required),
+    email: helpers.withMessage('이메일 형식이 올바르지 않습니다', email)
+  }
 }
 
 const v$ = useVuelidate(rules, state)
@@ -51,7 +54,7 @@ const check = async () => {
       </header>
       <label class="font-label">닉네임</label>
       <v-text-field
-        :error-messages="v$.nickname.$errors.map((e) => '닉네임을 입력하세요')"
+        :error-messages="v$.nickname.$errors.map((e) => e.$message)"
         placeholder="닉네임을 입력하세요."
         rounded="0"
         variant="outlined"
@@ -61,7 +64,7 @@ const check = async () => {
 
       <label class="font-label">이메일</label>
       <v-text-field
-        :error-messages="v$.email.$errors.map((e) => '이메일을 입력하세요')"
+        :error-messages="v$.email.$errors.map((e) => e.$message)"
         rounded="0"
         placeholder="이메일을 입력하세요."
         variant="outlined"
