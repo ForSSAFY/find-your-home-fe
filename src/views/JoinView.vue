@@ -1,19 +1,22 @@
 <script lang="ts" setup>
-import { reactive, ref} from 'vue'
+import { reactive, ref } from 'vue'
 import { useVuelidate } from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
+import { required, email, minLength, maxLength, sameAs } from '@vuelidate/validators'
+import { helpers } from 'vuelidate/lib/validators'
 
 //props 역할
 interface State {
-  nickname: string
   id: string
+  nickname: string
+  email: string
   password: string
   passwordchk: string
 }
 
 const initialState: State = {
-  nickname: '',
   id: '',
+  nickname: '',
+  email: '',
   password: '',
   passwordchk: ''
 }
@@ -23,10 +26,11 @@ const state = reactive<State>({
 })
 
 const rules = {
-  nickname: { required },
-  id: { required },
-  password: { required },
-  passwordchk: { required }
+  id: { required, minLength:minLength(6), maxLength: maxLength(12)},
+  nickname: {required, minLength:minLength(2), maxLength: maxLength(12)},
+  email: { required, email },
+  password: { required, minLength:minLength(8), maxLength: maxLength(20)},
+  passwordchk: { required, sameAsPassword:sameAs('password') }
 }
 
 const v$ = useVuelidate(rules, state)
@@ -53,11 +57,11 @@ const visible = ref(false)
       <label class="font-label">아이디</label>
       <div class="join-form-row">
         <v-text-field
-          rounded="0"
-          :error-messages="v$.id.$errors.map((e) => '아이디를 입력하세요.')"
-          v-model="state.id"
-          placeholder="아이디"
-          variant="outlined"
+        v-model="state.id"
+        placeholder="아이디"
+        hint="아이디는 6 ~ 12자의 영문,숫자만 사용가능합니다."
+        variant="outlined"
+        rounded="0"
           required
           @input="v$.id.$touch"
           @blur="v$.id.$touch"
@@ -68,15 +72,14 @@ const visible = ref(false)
       <label class="font-label">이메일</label>
       <div class="join-form-row">
         <v-text-field
-          rounded="0"
-          :counter="8"
-          :error-messages="v$.nickname.$errors.map((e) => '이메일을 입력하세요.')"
-          v-model="state.nickname"
-          variant="outlined"
+          :error-messages="v$.email.$errors.map((e) => '이메일을 입력하세요.')"
+          v-model="state.email"
           placeholder="이메일"
+          variant="outlined"
+          rounded="0"
           required
-          @input="v$.nickname.$touch"
-          @blur="v$.nickname.$touch"
+          @input="v$.email.$touch"
+          @blur="v$.email.$touch"
         ></v-text-field>
         <v-btn rounded="0" class="duplicate-check-button">이메일 인증</v-btn>
       </div>
@@ -84,12 +87,11 @@ const visible = ref(false)
       <label class="font-label">닉네임</label>
       <div class="join-form-row">
         <v-text-field
-          rounded="0"
-          :counter="8"
           :error-messages="v$.nickname.$errors.map((e) => '닉네임을 입력하세요.')"
           v-model="state.nickname"
-          variant="outlined"
           placeholder="닉네임"
+          rounded="0"
+          variant="outlined"
           required
           @input="v$.nickname.$touch"
           @blur="v$.nickname.$touch"
@@ -100,13 +102,14 @@ const visible = ref(false)
       <label class="font-label">비밀번호</label>
       <div class="join-form-row">
         <v-text-field
-          rounded="0"
           :error-messages="v$.password.$errors.map((e) => '비밀번호를 입력하세요.')"
           :append-inner-icon="visible ? 'visibility_off' : 'visibility'"
           :type="visible ? 'text' : 'password'"
           v-model="state.password"
-          placeholder="비밀번호"
+          placeholder="영문자 및 숫자 기호를 포함한 8자리 이상 20자리 이하"
+          rounded="0"
           variant="outlined"
+          hint="영문자 및 숫자 기호를 포함한 8자리 이상 20자리 이하"
           required
           @input="v$.password.$touch"
           @blur="v$.password.$touch"
@@ -117,12 +120,13 @@ const visible = ref(false)
 
       <div class="join-form-row">
         <v-text-field
-          rounded="0"
           v-model="state.passwordchk"
           placeholder="비밀번호 확인"
+          rounded="0"
           variant="outlined"
+          type="password"
           required
-          :error-messages="v$.passwordchk.$errors.map((e) => '비밀번호를 한번 더 입력하세요.')"
+          :error-messages="v$.passwordchk.$errors.map((e) => e.$message)"
           @input="v$.passwordchk.$touch"
           @blur="v$.passwordchk.$touch"
         ></v-text-field>
