@@ -89,7 +89,7 @@ const search = () => {
         <div class="header">
           <h2>뉴스</h2>
           <div class="header-more-box">
-            <p class="header-more">더보기<v-icon icon="add"></v-icon></p>
+            <router-link :to="{name:'news'}" class="header-more">더보기<v-icon icon="add"></v-icon></router-link>
           </div>
         </div>
         <div class="main-news-detail">
