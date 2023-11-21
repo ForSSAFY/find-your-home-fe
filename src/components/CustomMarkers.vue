@@ -58,45 +58,57 @@ watch(
 )
 
 watch(
-  () => props.activeId,
-  (activeId) => {
+  [() => props.markers, () => props.activeId],
+  ([, activeId]) => {
     for (const [id, overlay] of Object.entries(overlays)) {
       if (id === activeId) {
-        overlay.getContent().classList.add('marker__wrapper--hover')
+        overlay.getContent().classList.add('marker--hover')
       } else {
-        overlay.getContent().classList.remove('marker__wrapper--hover')
+        overlay.getContent().classList.remove('marker--hover')
       }
     }
-  }
+  }, { immediate: true, flush: 'post' }
 )
 
 const formatter = Intl.NumberFormat('ko-KR', { notation: 'compact' })
 
 function createContent(marker: Apt | Sidogun & { level: number }, overlay: typeof props.CustomOverlay) {
   const wrapper = document.createElement('div')
-  wrapper.classList.add('marker__wrapper')
+
+  const base = document.createElement('div')
+  base.classList.add('marker__base')
+
   const title = document.createElement('div')
   title.classList.add('marker__title')
   const desc = document.createElement('div')
   desc.classList.add('marker__desc')
-  wrapper.appendChild(title)
-  wrapper.appendChild(desc)
-  wrapper.addEventListener('mouseenter', () => {
+
+  wrapper.appendChild(base)
+  base.appendChild(title)
+  base.appendChild(desc)
+
+  base.addEventListener('mouseenter', () => {
     overlay.setZIndex(ZINDEX_HOVER)
   })
-  wrapper.addEventListener('mouseleave', () => {
+  base.addEventListener('mouseleave', () => {
     overlay.setZIndex(ZINDEX)
   })
-  wrapper.addEventListener('click', () => {
+  base.addEventListener('click', () => {
     emit('marker_click', marker)
   })
+
   // 내용 설정
   if ('cnt' in marker) {
     desc.innerText = marker.name
     title.innerText = marker.cnt + '건'
   } else {
+    const name = document.createElement('div')
+    name.classList.add('marker__name')
+    wrapper.appendChild(name)
+
     title.innerText = formatter.format(marker.price * 10000)
-    desc.innerText = marker.area + 'm²'
+    desc.innerText = Math.round(marker.area * 10) / 10 + 'm²'
+    name.innerText = marker.name
   }
   return wrapper
 }

@@ -7,11 +7,10 @@ import type { MapViewContext } from './MapView.vue';
 const route = useRoute()
 const router = useRouter()
 
-const { signalCenter, center, signalLevel, level, bounds, updateVisibleMarkers, activeId } = inject<MapViewContext>('mapView')!
+const { signalCenter, center, signalLevel, level, activeId } = inject<MapViewContext>('mapView')!
 
 const info = ref<AptInfo | null | undefined>(undefined)
 
-let counter = 0
 watch(() => route.params.id, (id) => {
   activeId.value = id?.toString()
   if (!activeId.value) return
@@ -20,18 +19,9 @@ watch(() => route.params.id, (id) => {
     .then(apt => {
       signalCenter.value = { lat: apt.lat, lng: apt.lng }
       signalLevel.value = Math.min(level.value, 4);
-      updateVisibleMarkers();
-      counter = 1
     })
     .catch(() => info.value = null)
 }, { immediate: true })
-
-watch(bounds, () => {
-  if (counter-- <= 0)
-    router.push({
-      name: 'search'
-    })
-})
 
 function onCloseClick() {
   // 선택된 마커 제거
@@ -52,12 +42,12 @@ function toPriceString(price: number): string {
   const 만 = Math.floor(price / 1_0000 % 1_0000)
   if (억 > 0) {
     if (만 > 0) {
-      return `${억}억 ${만}`
+      return `${억}억 ${만}만`
     } else {
       return `${억}억`
     }
   } else {
-    return `${만}`
+    return `${만}만`
   }
 }
 </script>
@@ -139,7 +129,7 @@ function toPriceString(price: number): string {
       </ul>
       <v-divider />
       <div class="apt-deal-label">
-        실거래가
+        실거래가 {{ info.deals.length }}건
       </div>
     </div>
 
