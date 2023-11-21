@@ -17,7 +17,7 @@
     "axios": "^1.6.1",
     "pinia": "^2.1.7",
     "vue": "^3.3.4",
-    "vue-kakao-maps": "^0.2.8",
+    "vue-kakao-maps": "^0.2.10",
     "vue-query": "^1.26.0",
     "vue-router": "^4.2.5",
     "vuetify": "^3.4.0"

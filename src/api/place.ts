@@ -124,8 +124,8 @@ export type SearchResult = {
   name: string
   /** 주소, location일 경우 undefined */
   address?: string
-}
+}[]
 
-export function search(query: string) {
-  return axios.get<AptInfo>(path + '/search', { params: { query } })
+export function searchAnything(query: string) {
+  return axios.get<SearchResult>(path + '/search', { params: { query } })
 }

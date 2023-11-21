@@ -110,7 +110,7 @@ function toPriceString(price: number): string {
           <li class="apt-nearby__item" v-if="item.type === 'subway'">
             <v-icon v-if="item.type === 'subway'" color="grey-darken-1" icon="subway" />
             <span>
-              {{ item.name }}까지 걸어서
+              <span class="text-grey-darken-2 font-weight-bold">{{ item.name }}</span>까지 걸어서
               <span class="text-grey-darken-1 font-weight-bold">{{ item.minutes }}분</span>
             </span>
           </li>

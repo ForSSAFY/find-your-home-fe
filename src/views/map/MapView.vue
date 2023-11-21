@@ -22,15 +22,9 @@ const signalCenter = shallowRef<LatLng>({
   lat: Number(route.query.lat ?? 37.5013),
   lng: Number(route.query.lng ?? 127.0395)
 })
-const center = ref(signalCenter.value)
-function setCenter(center: LatLng) {
-  signalCenter.value = center;
-}
+const center = shallowRef(signalCenter.value)
 const signalLevel = ref(Number(route.query.level ?? 4))
 const level = ref(signalLevel.value)
-function setLevel(level: number) {
-  signalLevel.value = level
-}
 const bounds = shallowRef<LatLngBounds>({ ne: { lat: 0, lng: 0 }, sw: { lat: 0, lng: 0 } })
 function updateVisibleMarkers(options?: { bounds?: LatLngBounds, level?: number }) {
   const b = options?.bounds ?? bounds.value
@@ -38,26 +32,22 @@ function updateVisibleMarkers(options?: { bounds?: LatLngBounds, level?: number 
   if (l <= 4) {
     getAptsInArea(...flatLatLngBounds(b), l)
       .then((res) => (markers.value = res.data))
-      .then(console.log)
-      .catch(() => (markers.value = []))
   } else {
     getSidogunInArea(...flatLatLngBounds(b), l)
       .then((res) => (markers.value = res.data.result.map(item => ({ ...item, level: res.data.level }))))
-      .catch(() => (markers.value = []))
   }
 }
 
 // ========== 지도의 마커 관리 ==========
 const markers = ref<(Apt | Sidogun & { level: number })[]>([])
 const activeId = ref<string | undefined>('');
-const context = { center, signalCenter, setCenter, level: level, signalLevel, setLevel, bounds: bounds, updateVisibleMarkers, activeId }
+const context = { center, signalCenter, level: level, signalLevel, bounds: bounds, updateVisibleMarkers, activeId }
 provide('mapView', context)
 export type MapViewContext = typeof context
 // 지도 범위 변경 시 마커 업데이트
 const debounceUpdateVisibleMarkers = debounce(updateVisibleMarkers, 200)
 watch(bounds, () => {
   debounceUpdateVisibleMarkers()
-  console.log("update")
 }, { flush: 'post' })
 
 // ========== 경로 접속 시 URL로부터 지도 위치 설정 ==========
