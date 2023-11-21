@@ -1,27 +1,61 @@
 <script setup lang="ts">
-import type { Ref } from 'vue'
-import { inject } from 'vue'
-import type { LatLng, LatLngBounds } from 'vue-kakao-maps'
-import type { AptInfo } from '@/api/place'
+import { getAptInfo, type AptInfo } from '@/api/place';
+import { inject, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import type { MapViewContext } from './MapView.vue';
 
-const props = defineProps<AptInfo>()
+const route = useRoute()
+const router = useRouter()
 
-const { signalCenter, setCenter, signalLevel, setLevel, bounds, updateMarkers, selectedId } =
-  inject<{
-    signalCenter: Ref<LatLng>
-    setCenter: (center: LatLng) => void
-    signalLevel: Ref<number>
-    setLevel: (level: number) => void
-    bounds: Ref<LatLngBounds>
-    updateMarkers: () => void
-    selectedId: Ref<string>
-  }>('mapView')!
+const { signalCenter, center, signalLevel, level, bounds, updateVisibleMarkers, activeId } = inject<MapViewContext>('mapView')!
+
+const info = ref<AptInfo | null | undefined>(undefined)
+
+let counter = 0
+watch(() => route.params.id, (id) => {
+  activeId.value = id?.toString()
+  if (!activeId.value) return
+  getAptInfo(activeId.value)
+    .then(res => info.value = res.data)
+    .then(apt => {
+      signalCenter.value = { lat: apt.lat, lng: apt.lng }
+      signalLevel.value = Math.min(level.value, 4);
+      updateVisibleMarkers();
+      counter = 1
+    })
+    .catch(() => info.value = null)
+}, { immediate: true })
+
+watch(bounds, () => {
+  if (counter-- <= 0)
+    router.push({
+      name: 'search'
+    })
+})
+
+function onCloseClick() {
+  // 선택된 마커 제거
+  activeId.value = '';
+  // 현재 좌표로 메인화면으로 이동
+  router.push({
+    name: 'search',
+    query: {
+      lat: center.value.lat,
+      lng: center.value.lng,
+      level: level.value
+    }
+  })
+}
 
 function toPriceString(price: number): string {
   const 억 = Math.floor(price / 1_0000_0000)
-  const 만 = Math.floor(price / 1_0000)
-  if (price > 1_0000_0000) {
-    return `${억}억 ${만}`
+  const 만 = Math.floor(price / 1_0000 % 1_0000)
+  if (억 > 0) {
+    if (만 > 0) {
+      return `${억}억 ${만}`
+    } else {
+      return `${억}억`
+    }
   } else {
     return `${만}`
   }
@@ -29,33 +63,42 @@ function toPriceString(price: number): string {
 </script>
 
 <template>
-  <section class="apt-info">
+  <!-- Loading -->
+  <div v-if="info === undefined" class="apt-loading">
+    <v-progress-circular indeterminate :size="60" />
+    <v-btn variant="text" icon="close" style="position: absolute; top: 1rem; right: 1rem;" @click="onCloseClick" />
+  </div>
+  <!-- Wrong id -->
+  <div v-if="info === null">
+    <div class="apt-info__top">
+      <header class="apt-info__header">
+        <h3 class="apt-info__title">
+          <v-icon icon="error" />
+          잘못된 아파트 주소입니다.
+        </h3>
+      </header>
+      <v-btn variant="text" icon="close" class="mt-n2 mr-n2" @click="onCloseClick" />
+    </div>
+  </div>
+  <!-- Ok -->
+  <section class="apt-info" v-if="info">
     <div>
       <div class="apt-info__top">
         <header class="apt-info__header">
-          <h3 class="apt-info__title">{{ props.name }}</h3>
-          <p class="apt-info__address">{{ props.address }}</p>
+          <h3 class="apt-info__title">{{ info.name }}</h3>
+          <p class="apt-info__address">{{ info.address }}</p>
           <p class="apt-info__desc">
-            <span>{{ props.date }}</span>
+            <span>{{ info.date }}</span>
             <v-divider vertical />
-            <span>{{ props.area }}m²</span>
+            <span>{{ info.area }}m²</span>
           </p>
         </header>
-        <v-btn variant="text" icon="close" class="mt-n3 mr-n2" @click="
-          $router.push({
-            name: 'index',
-            query: {
-              lat: signalCenter.lat,
-              lng: signalCenter.lng,
-              zoom: signalLevel
-            }
-          })
-          " />
+        <v-btn variant="text" icon="close" class="mt-n2 mr-n2" @click="onCloseClick" />
       </div>
 
       <div class="apt-price">
         <div class="apt-price__label">최근 거래가</div>
-        <div class="apt-price__price">{{ toPriceString(props.price) }}</div>
+        <div class="apt-price__price">{{ toPriceString(info.price * 10000) }}</div>
       </div>
 
       <v-divider />
@@ -63,10 +106,7 @@ function toPriceString(price: number): string {
 
     <div>
       <ul class="apt-nearby">
-        {{
-          props.nearby
-        }}
-        <template v-for="(item, i) of props.nearby" :key="i">
+        <template v-for="(item, i) of info.nearby" :key="i">
           <li class="apt-nearby__item" v-if="item.type === 'subway'">
             <v-icon v-if="item.type === 'subway'" color="grey-darken-1" icon="subway" />
             <span>
@@ -96,68 +136,25 @@ function toPriceString(price: number): string {
             </span>
           </li>
         </template>
-        <v-divider />
       </ul>
+      <v-divider />
+      <div class="apt-deal-label">
+        실거래가
+      </div>
     </div>
 
     <ul class="apt-deal">
-      <template v-for="item, i of props.deals" :key="i">
+      <template v-for="item, i of info.deals" :key="i">
         <li class="apt-deal__item">
           <div class="apt-deal__date">{{ item.date }}</div>
-          <div class="apt-deal__name">{{ item.name }}</div>
-          <div class="apt-deal__price">매매 {{ item.price }}</div>
+          <div class="apt-deal__name">{{ info.name }}</div>
+          <div class="apt-deal__price">매매 {{ toPriceString(item.price * 10000) }}</div>
           <div class="apt-deal__info">
-            <span>{{ item.dong }}동</span>
-            <v-divider vertical />
             <span>{{ item.floor }}층</span>
           </div>
         </li>
         <v-divider />
       </template>
-      <li class="apt-deal__item">
-        <div class="apt-deal__date">2023.11.20</div>
-        <div class="apt-deal__name">기아아파트</div>
-        <div class="apt-deal__price">매매 12억 1200</div>
-        <div class="apt-deal__info">
-          <span>101동</span>
-          <v-divider vertical />
-          <span>5층</span>
-        </div>
-      </li>
-      <v-divider />
-      <li class="apt-deal__item">
-        <div class="apt-deal__date">2023.06.06</div>
-        <div class="apt-deal__name">음지아파트</div>
-        <div class="apt-deal__price">매매 22억 9687</div>
-        <div class="apt-deal__info">
-          <span>201동</span>
-          <v-divider vertical />
-          <span>13층</span>
-        </div>
-      </li>
-      <v-divider />
-      <li class="apt-deal__item">
-        <div class="apt-deal__date">2023.07.05</div>
-        <div class="apt-deal__name">삼성아파트</div>
-        <div class="apt-deal__price">매매 3조 5000억</div>
-        <div class="apt-deal__info">
-          <span>333동</span>
-          <v-divider vertical />
-          <span>33층</span>
-        </div>
-      </li>
-      <v-divider />
-      <li class="apt-deal__item">
-        <div class="apt-deal__date">2023.12.31.</div>
-        <div class="apt-deal__name">뷰파트</div>
-        <div class="apt-deal__price">매매 5300</div>
-        <div class="apt-deal__info">
-          <span>1205동</span>
-          <v-divider vertical />
-          <span>1층</span>
-        </div>
-      </li>
-      <v-divider />
     </ul>
   </section>
 </template>
@@ -166,6 +163,7 @@ function toPriceString(price: number): string {
 .apt-info {
   display: grid;
   grid-template-rows: min-content min-content auto;
+  height: 100%;
   overflow-y: hidden;
   line-height: 1;
 }
@@ -187,6 +185,9 @@ function toPriceString(price: number): string {
 .apt-info__title {
   font-size: larger;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .apt-info__address {
@@ -235,11 +236,14 @@ function toPriceString(price: number): string {
   gap: 0.5rem;
 }
 
+.apt-deal-label {
+  padding: 1rem 1.5rem;
+}
+
 .apt-deal {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  height: 100%;
   max-height: 100%;
 }
 
@@ -270,5 +274,13 @@ function toPriceString(price: number): string {
   margin-top: 0.5rem;
   font-size: large;
   font-weight: 700;
+}
+
+.apt-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 </style>

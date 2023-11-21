@@ -5,17 +5,18 @@ import '@/assets/marker.css'
 import type { Apt, Sidogun } from '@/api/place'
 
 export interface Props {
-  markers?: (Apt | Sidogun)[]
-  LatLng?: any
-  CustomOverlay?: any
+  markers: (Apt | (Sidogun & { level: number }))[]
+  LatLng: any
+  CustomOverlay: any
+  activeId: string
 }
 
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Partial<Props>>(), {
   markers: () => []
 })
 
 const emit = defineEmits<{
-  marker_click: [{ lat: number; lng: number; level?: number }]
+  marker_click: [apt: Props['markers'][0]]
 }>()
 
 const map = (inject('map') as any).map
@@ -23,7 +24,7 @@ const map = (inject('map') as any).map
 const ZINDEX = 0
 const ZINDEX_HOVER = 40
 
-let overlays: Record<(Apt | Sidogun)['id'], typeof props.CustomOverlay> = {}
+let overlays: Record<Props['markers'][0]['id'], typeof props.CustomOverlay> = {}
 
 watch(
   () => props.markers,
@@ -56,9 +57,22 @@ watch(
   { flush: 'post' }
 )
 
+watch(
+  () => props.activeId,
+  (activeId) => {
+    for (const [id, overlay] of Object.entries(overlays)) {
+      if (id === activeId) {
+        overlay.getContent().classList.add('marker__wrapper--hover')
+      } else {
+        overlay.getContent().classList.remove('marker__wrapper--hover')
+      }
+    }
+  }
+)
+
 const formatter = Intl.NumberFormat('ko-KR', { notation: 'compact' })
 
-function createContent(marker: Apt | Sidogun, overlay: typeof props.CustomOverlay) {
+function createContent(marker: Apt | Sidogun & { level: number }, overlay: typeof props.CustomOverlay) {
   const wrapper = document.createElement('div')
   wrapper.classList.add('marker__wrapper')
   const title = document.createElement('div')
@@ -74,12 +88,7 @@ function createContent(marker: Apt | Sidogun, overlay: typeof props.CustomOverla
     overlay.setZIndex(ZINDEX)
   })
   wrapper.addEventListener('click', () => {
-    const level = 'level' in marker ? { level: marker.level as number } : {}
-    emit('marker_click', {
-      ...level,
-      lat: marker.lat,
-      lng: marker.lng
-    })
+    emit('marker_click', marker)
   })
   // 내용 설정
   if ('cnt' in marker) {

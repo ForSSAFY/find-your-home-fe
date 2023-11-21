@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { getAptsInArea, getSidogunInArea } from '@/api/place'
+import { getAptsInArea, getSidogunInArea, type Apt, type Sidogun } from '@/api/place'
 import CustomMarkers from '@/components/CustomMarkers.vue'
 import { debounce } from '@/utils/debounce'
-import { provide } from 'vue'
-import { ref, shallowRef, watch } from 'vue'
+import { provide, ref, shallowRef, watch } from 'vue'
 import {
   KakaoMap,
   ZoomControl,
@@ -23,98 +22,55 @@ const signalCenter = shallowRef<LatLng>({
   lat: Number(route.query.lat ?? 37.5013),
   lng: Number(route.query.lng ?? 127.0395)
 })
+const center = ref(signalCenter.value)
 function setCenter(center: LatLng) {
   signalCenter.value = center;
 }
 const signalLevel = ref(Number(route.query.level ?? 4))
+const level = ref(signalLevel.value)
 function setLevel(level: number) {
   signalLevel.value = level
 }
 const bounds = shallowRef<LatLngBounds>({ ne: { lat: 0, lng: 0 }, sw: { lat: 0, lng: 0 } })
-function updateMarkers() {
-  if (level.value <= 4) {
-    getAptsInArea(...flatLatLngBounds(bounds.value), level.value)
+function updateVisibleMarkers(options?: { bounds?: LatLngBounds, level?: number }) {
+  const b = options?.bounds ?? bounds.value
+  const l = options?.level ?? level.value
+  if (l <= 4) {
+    getAptsInArea(...flatLatLngBounds(b), l)
       .then((res) => (markers.value = res.data))
+      .then(console.log)
       .catch(() => (markers.value = []))
   } else {
-    getSidogunInArea(...flatLatLngBounds(bounds.value), level.value)
+    getSidogunInArea(...flatLatLngBounds(b), l)
       .then((res) => (markers.value = res.data.result.map(item => ({ ...item, level: res.data.level }))))
       .catch(() => (markers.value = []))
   }
 }
-// CustomMarkers hover 상태
-const selectedId = ref(0);
-provide('mapView', { signalCenter, setCenter, signalLevel, setLevel, bounds, updateMarkers, selectedId })
+
+// ========== 지도의 마커 관리 ==========
+const markers = ref<(Apt | Sidogun & { level: number })[]>([])
+const activeId = ref<string | undefined>('');
+const context = { center, signalCenter, setCenter, level: level, signalLevel, setLevel, bounds: bounds, updateVisibleMarkers, activeId }
+provide('mapView', context)
+export type MapViewContext = typeof context
+// 지도 범위 변경 시 마커 업데이트
+const debounceUpdateVisibleMarkers = debounce(updateVisibleMarkers, 200)
+watch(bounds, () => {
+  debounceUpdateVisibleMarkers()
+  console.log("update")
+}, { flush: 'post' })
 
 // ========== 경로 접속 시 URL로부터 지도 위치 설정 ==========
-// index: 자동으로 설정
-// apt: router-view에서 설정
-// search: router-view에서 설정
+// index: MapIndexView에서 설정
+// apt: MapAptInfoView에서 설정
+// search: MapSearchView에서 설정
 
-// ==========  ==========
-// ==========  ==========
-// ==========  ==========
-// ==========  ==========
 
-// ---------- 현재 지도 위치와 경로 동기화 ----------
-const inputCenter = shallowRef({
-  lat: Number(route.query.lat ?? 37.5013),
-  lng: Number(route.query.lng ?? 127.0395)
-})
-const inputLevel = ref(Number(route.query.level ?? 4))
-const center = shallowRef(inputCenter.value)
-const level = ref(inputLevel.value)
-
-const updateUrl = (center: LatLng, level: number) => {
-  router.replace({ query: { lat: center.lat, lng: center.lng, level } })
-}
-const debounceUpdateUrl = debounce(updateUrl, 100)
-
-// 화면 좌표 변경 200ms 후 url 업데이트
-watch(
-  center,
-  (center) => {
-    debounceUpdateUrl(center, level.value)
-  },
-  { flush: 'post' }
-)
-// Zoom 변경 완료 시 즉시 url 업데이트
-watch(
-  level,
-  (level) => {
-    updateUrl(center.value, level)
-  },
-  { flush: 'post' }
-)
 
 // ---------- 아파트|시도군요약 정보들 요청 ----------
-const markers = ref<{ id: string; lat: number; lng: number; name: string }[]>([])
 // updateApts: KakaoMap.load 이벤트에 한 번 호출됨
 // 현재 화면 zoom zoom에 따라 다른 API 요청해야 함
-const updateApts = (bounds: LatLngBounds) => {
-  if (level.value <= 4) {
-    getAptsInArea(...flatLatLngBounds(bounds), level.value)
-      .then((res) => (markers.value = res.data))
-      .then(console.log)
-      .catch(() => (markers.value = []))
-  } else {
-    getSidogunInArea(...flatLatLngBounds(bounds), level.value)
-      .then((res) => (markers.value = res.data.result.map(item => ({ ...item, level: res.data.level }))))
-      .then(console.log)
-      .catch(() => (markers.value = []))
-  }
-}
 
-// 현재 화면 범위 추적
-// const bounds = ref<LatLngBounds>({ ne: { lat: 0, lng: 0 }, sw: { lat: 0, lng: 0 } })
-const debouncedBounds = ref(bounds.value)
-// 일정 시간 동안 bounds 변화 없을 때 debouncedBounds 업데이트
-const updateDebouncedBounds = debounce((bounds) => (debouncedBounds.value = bounds), 200)
-watch(bounds, updateDebouncedBounds, { deep: true })
-// debouncedBounds 업데이트 시 updateApts 호출
-watch(debouncedBounds, (bounds) => {
-  updateApts(bounds)
-}, { flush: 'post' })
 
 const KakaoLatLng = shallowRef(undefined)
 const CustomOverlay = shallowRef(undefined)
@@ -124,15 +80,26 @@ function flatLatLngBounds(bounds: LatLngBounds): [number, number, number, number
   return [bounds.sw.lat, bounds.sw.lng, bounds.ne.lat, bounds.ne.lng]
 }
 
-function onMapLoad({ bounds: b }: { bounds: LatLngBounds }) {
-  updateApts(b)
+// 맵 로드 시 화면에 마커 로드
+function onMapLoad({ bounds }: { bounds: LatLngBounds }) {
+  updateVisibleMarkers({ bounds })
+  // @ts-expect-error
   KakaoLatLng.value = window.kakao.maps.LatLng
+  // @ts-expect-error
   CustomOverlay.value = window.kakao.maps.CustomOverlay
 }
 
-function onMarkerClick({ lat, lng, level: lv }: { lat: number, lng: number, level?: number }) {
-  inputCenter.value = { lat, lng }
-  inputLevel.value = lv ?? level.value
+// 마커 클릭 시 해당 아파트 세부 정보 화면으로 이동
+function onMarkerClick(marker: Apt | Sidogun & { level: number }) {
+  // Sidogun 마커 클릭
+  if ('level' in marker) {
+    signalCenter.value = { lat: marker.lat, lng: marker.lng }
+    signalLevel.value = marker.level
+    updateVisibleMarkers()
+  } else { // Apt 마커 클릭
+    // MapAptInfoView로 처리 위임
+    router.push({ name: 'apt', params: { id: marker.id } })
+  }
 }
 </script>
 
@@ -164,25 +131,16 @@ function onMarkerClick({ lat, lng, level: lv }: { lat: number, lng: number, leve
     </v-app-bar>
     <!-- Sidebar -->
     <v-navigation-drawer permanent :width="384">
-      <div class="sidebar-container">
-        <nav class="apt-search">
-          <v-text-field density="compact" variant="outlined" label="동, 지하철, 아파트 검색" append-inner-icon="search" rounded="0"
-            single-line hide-details class="ma-6" @click:append-inner="(e) => console.log('검색 안돼~')">
-          </v-text-field>
-          <v-divider />
-        </nav>
-
-        <router-view />
-      </div>
+      <router-view />
     </v-navigation-drawer>
     <!-- Main -->
     <v-main style="height: 100%">
       <!-- Map -->
-      <KakaoMap pan :center="inputCenter" :level="inputLevel" style="height: 100%"
+      <KakaoMap pan :center="signalCenter" :level="signalLevel" style="height: 100%"
         @center_changed="({ center: c }) => (center = c)" @zoom_changed="({ level: l }) => (level = l)"
         @bounds_changed="({ bounds: b }) => (bounds = b)" @load="onMapLoad">
         <!-- <Marker v-for="m in markers" :key="m.id" :position="m" :z-index="8000" /> -->
-        <CustomMarkers :markers="markers" :LatLng="KakaoLatLng" :CustomOverlay="CustomOverlay"
+        <CustomMarkers :markers="markers" :LatLng="KakaoLatLng" :CustomOverlay="CustomOverlay" :active-id="activeId"
           @marker_click="onMarkerClick" />
         <ZoomControl position="BOTTOMRIGHT" />
       </KakaoMap>
@@ -190,12 +148,4 @@ function onMarkerClick({ lat, lng, level: lv }: { lat: number, lng: number, leve
   </div>
 </template>
 
-<style scoped>
-.sidebar-container {
-  display: grid;
-  grid-template-rows: min-content auto;
-  height: 100%;
-  max-height: 100%;
-  overflow-y: hidden;
-}
-</style>
+<style scoped></style>

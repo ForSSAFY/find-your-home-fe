@@ -86,17 +86,6 @@ export function getSidogunInArea(
   })
 }
 
-/**
- * @param code 동코드
- */
-export function getSidogun(code: string) {
-  // TODO
-}
-
-export function getAptInfo(id: string): AptInfo {
-  // TODO
-}
-
 export type Nearby =
   | {
       type: 'store' | 'park' | 'charger'
@@ -110,7 +99,6 @@ export type Nearby =
 
 export type Deal = {
   date: string
-  name: string
   price: number
   dong: number
   floor: number
@@ -125,4 +113,19 @@ export interface AptInfo {
   price: number
   nearby: Nearby[]
   deals: Deal[]
+}
+
+export function getAptInfo(id: string) {
+  return axios.get<AptInfo>(path + '/house/' + id)
+}
+
+export type SearchResult = {
+  type: 'location' | 'subway' | 'apt'
+  name: string
+  /** 주소, location일 경우 undefined */
+  address?: string
+}
+
+export function search(query: string) {
+  return axios.get<AptInfo>(path + '/search', { params: { query } })
 }

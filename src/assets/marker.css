@@ -26,11 +26,8 @@
   border-radius: 4px;
 }
 
-* > .marker__wrapper:hover {
-  z-index: 2000;
-}
-
-.marker__wrapper:hover {
+.marker__wrapper:hover,
+.marker__wrapper--hover {
   background-color: var(--marker-bg-color-hover);
   border: 1px solid var(--marker-border-color-hover);
 }
@@ -57,7 +54,8 @@
   border-top: var(--marker-arrow-height) solid var(--marker-bg-color);
 }
 
-.marker__wrapper:hover::after {
+.marker__wrapper:hover::after,
+.marker__wrapper--hover::after {
   border-top-color: var(--marker-bg-color-hover);
 }
 
@@ -66,7 +64,8 @@
   color: var(--marker-title-color);
 }
 
-.marker__wrapper:hover .marker__title {
+.marker__wrapper:hover .marker__title,
+.marker__wrapper--hover .marker__title {
   color: var(--marker-title-color-hover);
 }
 
@@ -76,9 +75,7 @@
   color: var(--marker-desc-color);
 }
 
-.marker__wrapper:hover .marker__desc {
+.marker__wrapper:hover .marker__desc,
+.marker__wrapper--hover .marker__desc {
   color: var(--marker-desc-color-hover);
-}
-
-.marker__wrapper--group {
 }
