@@ -1,7 +1,40 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
+import { useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
+import router from '@/router';
 
 const visible = ref(false)
+
+//props 역할
+interface State {
+  id: string
+  password: string
+}
+
+const initialState: State = {
+  id: '',
+  password: '',
+}
+
+const state = reactive<State>({
+  ...initialState
+})
+
+const rules = {
+  id: { required },
+  password: { required },
+}
+
+const v$ = useVuelidate(rules, state)
+
+const login = async() => {
+  const isFormCorrect = await v$.value.$validate();
+  if (!isFormCorrect) return;
+  router.push({name:'main'})
+}
+
 </script>
 
 <template>
@@ -13,6 +46,8 @@ const visible = ref(false)
       </div>
 
       <v-text-field
+        :error-messages="v$.id.$errors.map((e) => '아이디를 입력하세요.')"
+        v-model="state.id"
         rounded="0"
         density="comfortable"
         placeholder="아이디"
@@ -21,9 +56,11 @@ const visible = ref(false)
       ></v-text-field>
 
       <v-text-field
-        rounded="0"
         :append-inner-icon="visible ? 'visibility_off' : 'visibility'"
         :type="visible ? 'text' : 'password'"
+        :error-messages="v$.password.$errors.map((e) => '비밀번호를 입력하세요')"
+        v-model="state.password"
+        rounded="0"
         density="comfortable"
         placeholder="비밀번호"
         prepend-inner-icon="lock"
@@ -31,7 +68,7 @@ const visible = ref(false)
         @click:append-inner="visible = !visible"
       ></v-text-field>
 
-      <v-btn class="login-button" rounded="0">로그인</v-btn>
+      <v-btn class="login-button" rounded="0" @click="login()">로그인</v-btn>
 
       <div class="find_wrap">
         <router-link to="/find-id" class="text-decoration-none">아이디 찾기</router-link>
