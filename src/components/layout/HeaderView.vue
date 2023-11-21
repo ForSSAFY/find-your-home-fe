@@ -1,4 +1,12 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRouter } from 'vue-router';
+const router = useRouter()
+
+const goNews = () => {
+  router.push({name:'news'})
+}
+
+</script>
 
 <template>
   <header>
@@ -12,7 +20,7 @@
         <div class="menu">
           <v-btn>Find Your Home</v-btn>
           <v-btn>관심 지역</v-btn>
-          <v-btn>뉴스</v-btn>
+          <v-btn @click="goNews()">뉴스</v-btn>
         </div>
         <div class="login">
           <router-link :to="{ name: 'login' }"><v-btn rounded="0">로그인</v-btn></router-link>
