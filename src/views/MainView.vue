@@ -81,7 +81,7 @@ const search = () => {
     <section>
       <div class="header">
         <h2>뉴스</h2>
-        <div class="header-more-wrapper">
+        <div class="header-line">
           <router-link :to="{ name: 'news' }" class="header-more">
             더보기
             <v-icon icon="add" size="sm" />
@@ -97,7 +97,7 @@ const search = () => {
     <section>
       <div class="header">
         <h2>공지사항</h2>
-        <div class="header-more-wrapper">
+        <div class="header-line">
           <router-link :to="{ name: 'notice' }" class="header-more">
             더보기
             <v-icon icon="add" />
@@ -192,7 +192,7 @@ video {
   line-height: 1;
 }
 
-.header-more-wrapper {
+.header-line {
   display: flex;
   align-items: end;
   justify-content: end;

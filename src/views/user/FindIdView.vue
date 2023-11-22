@@ -1,18 +1,16 @@
 <script setup lang="ts">
-import { useVuelidate } from '@vuelidate/core';
-import { email, helpers, required } from '@vuelidate/validators';
-import { reactive, toValue } from 'vue';
-import { useRouter } from 'vue-router';
+import { useVuelidate } from '@vuelidate/core'
+import { email, helpers, required } from '@vuelidate/validators'
+import { reactive, toValue } from 'vue'
+import { useRouter } from 'vue-router'
 
 const router = useRouter()
 
 interface State {
-  nickname: string
   email: string
 }
 
 const initialState: State = {
-  nickname: '',
   email: ''
 }
 
@@ -21,7 +19,6 @@ const state = reactive<State>({
 })
 
 const rules = {
-  nickname: { required: helpers.withMessage('닉네임을 입력해주세요', required) },
   email: {
     required: helpers.withMessage('이메일을 입력해주세요', required),
     email: helpers.withMessage('이메일 형식이 올바르지 않습니다', email)
@@ -48,23 +45,20 @@ const check = async () => {
 <template>
   <v-layout>
     <v-main class="container">
-      <v-form class="find-id-form">
-        <header class="header">
+      <form class="find-id-form">
+        <header class="header mb-6">
           <h2>아이디 찾기</h2>
           <div class="header-line"></div>
         </header>
-        <label class="font-label">닉네임</label>
-        <v-text-field :error-messages="v$.nickname.$errors.map((e) => toValue(e.$message))" placeholder="닉네임을 입력하세요."
-          rounded="0" variant="outlined" v-model="state.nickname" required></v-text-field>
 
         <label class="font-label">이메일</label>
         <v-text-field :error-messages="v$.email.$errors.map((e) => toValue(e.$message))" rounded="0"
-          placeholder="이메일을 입력하세요." variant="outlined" v-model="state.email" required></v-text-field>
+          placeholder="이메일을 입력하세요." variant="outlined" v-model="state.email" required />
         <div class="buttons">
           <v-btn rounded="0" variant="outlined" class="reset-button" @click="clear()">초기화</v-btn>
           <v-btn rounded="0" class="find-id-button" @click="check()">다음</v-btn>
         </div>
-      </v-form>
+      </form>
     </v-main>
   </v-layout>
 </template>
@@ -86,44 +80,56 @@ const check = async () => {
   box-shadow: 0px 10px 20px rgb(0, 0, 0, 0.38);
 }
 
+.login-form {
+  max-width: 600px;
+  width: 100%;
+  padding: 4rem;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.37);
+}
+
 .header {
   display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 2rem;
+  align-items: start;
+  gap: 0.5rem;
 }
 
 .header h2 {
   font-weight: 700;
-  font-size: 40px;
+  font-size: 2rem;
   line-height: 1;
 }
 
 .header-line {
+  display: flex;
+  align-items: end;
+  justify-content: end;
+  padding-bottom: 0.25rem;
   flex: 1 0 0;
   border-bottom: 2px solid black;
+  height: 1.85rem;
 }
 
 .font-label {
-  font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .buttons {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin-top: 1rem;
 }
 
 .reset-button {
   height: 56px;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .find-id-button {
   height: 56px;
+  font-size: 1rem;
+  font-weight: 500;
   background-color: black;
   color: white;
 }

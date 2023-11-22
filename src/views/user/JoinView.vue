@@ -92,7 +92,7 @@ const visible = ref(false)
   <v-layout>
     <v-main class="container">
       <form class="join-form">
-        <header class="header">
+        <header class="header mb-6">
           <h2>회원가입</h2>
           <div class="header-line"></div>
         </header>
@@ -101,15 +101,14 @@ const visible = ref(false)
         <div class="join-form-row">
           <v-text-field :error-messages="v$.id.$errors.map((e) => toValue(e.$message))" v-model="state.id"
             placeholder="아이디" hint="아이디는 6 ~ 12자의 영문,숫자만 사용가능합니다." variant="outlined" rounded="0" required
-            @input="v$.id.$touch" @blur="v$.id.$touch"></v-text-field>
+            @input="v$.id.$touch" @blur="v$.id.$touch" />
           <v-btn rounded="0" class="duplicate-check-button">중복확인</v-btn>
         </div>
 
         <label class="font-label">이메일</label>
         <div class="join-form-row">
           <v-text-field :error-messages="v$.email.$errors.map((e) => toValue(e.$message))" v-model="state.email"
-            placeholder="이메일" variant="outlined" rounded="0" required @input="v$.email.$touch"
-            @blur="v$.email.$touch"></v-text-field>
+            placeholder="이메일" variant="outlined" rounded="0" required @input="v$.email.$touch" @blur="v$.email.$touch" />
           <v-btn rounded="0" class="duplicate-check-button">이메일 인증</v-btn>
         </div>
 
@@ -117,8 +116,8 @@ const visible = ref(false)
         <div class="join-form-row">
           <v-text-field :error-messages="v$.nickname.$errors.map((e) => toValue(e.$message))" v-model="state.nickname"
             placeholder="닉네임" rounded="0" variant="outlined" required @input="v$.nickname.$touch"
-            @blur="v$.nickname.$touch"></v-text-field>
-          <v-btn rounded="0" class="duplicate-check-button none-button" disabled>중복확인</v-btn>
+            @blur="v$.nickname.$touch" />
+          <div></div>
         </div>
 
         <label class="font-label">비밀번호</label>
@@ -127,15 +126,15 @@ const visible = ref(false)
             :append-inner-icon="visible ? 'visibility_off' : 'visibility'" :type="visible ? 'text' : 'password'"
             v-model="state.password" placeholder="영문자 및 숫자 기호를 포함한 8자리 이상 20자리 이하" rounded="0" variant="outlined"
             hint="영문자 및 숫자 기호를 포함한 8자리 이상 20자리 이하" required @input="v$.password.$touch" @blur="v$.password.$touch"
-            @click:append-inner="visible = !visible"></v-text-field>
-          <v-btn rounded="0" class="duplicate-check-button none-button" disabled>중복확인</v-btn>
+            @click:append-inner="visible = !visible" />
+          <div></div>
         </div>
 
         <div class="join-form-row">
           <v-text-field v-model="state.passwordchk" placeholder="비밀번호 확인" rounded="0" variant="outlined" type="password"
             required :error-messages="v$.passwordchk.$errors.map((e) => toValue(e.$message))"
-            @input="v$.passwordchk.$touch" @blur="v$.passwordchk.$touch"></v-text-field>
-          <v-btn rounded="0" class="duplicate-check-button none-button" disabled>중복확인</v-btn>
+            @input="v$.passwordchk.$touch" @blur="v$.passwordchk.$touch" />
+          <div></div>
         </div>
         <div class="buttons">
           <v-btn rounded="0" variant="outlined" class="reset-button" @click="clear()">초기화</v-btn>
@@ -164,8 +163,8 @@ const visible = ref(false)
 
 .join-form-row {
   display: grid;
-  grid-template-columns: 1fr 100px;
-  gap: 16px;
+  grid-template-columns: 1fr 8rem;
+  gap: 1rem;
 }
 
 .duplicate-check-button {
@@ -181,44 +180,50 @@ const visible = ref(false)
 }
 
 .font-label {
-  font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 /* 회원가입 헤더 */
+
 .header {
   display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 2rem;
+  align-items: start;
+  gap: 0.5rem;
 }
 
 .header h2 {
   font-weight: 700;
-  font-size: 40px;
+  font-size: 2rem;
   line-height: 1;
 }
 
 .header-line {
+  display: flex;
+  align-items: end;
+  justify-content: end;
+  padding-bottom: 0.25rem;
   flex: 1 0 0;
   border-bottom: 2px solid black;
+  height: 1.85rem;
 }
 
 .buttons {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin-top: 1rem;
 }
 
 .reset-button {
   height: 56px;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .join-button {
   height: 56px;
+  font-size: 1rem;
+  font-weight: 500;
   background-color: black;
   color: white;
 }

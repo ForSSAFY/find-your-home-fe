@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { editQna, getEditQna, writeQna } from "@/api/qna";
+import { editQna, getEditQna } from "@/api/qna";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 

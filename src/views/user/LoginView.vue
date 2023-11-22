@@ -43,7 +43,7 @@ const login = async () => {
   <v-layout>
     <v-main class="container">
       <v-card class="login-form" rounded="0">
-        <div class="header">
+        <div class="header mb-6">
           <h2>로그인</h2>
           <div class="header-line"></div>
         </div>
@@ -58,13 +58,13 @@ const login = async () => {
 
         <v-btn class="login-button" rounded="0" @click="login()">로그인</v-btn>
 
-        <div class="find_wrap">
-          <router-link to="/find-id" class="text-decoration-none">아이디 찾기</router-link>
-          <v-divider inset vertical></v-divider>
-          <router-link to="/find-pw" class="text-decoration-none">비밀번호 찾기</router-link>
-          <v-divider inset vertical></v-divider>
-          <router-link to="/join" class="text-decoration-none">회원 가입</router-link>
-        </div>
+        <nav class="find_wrap">
+          <router-link to="/find-id">아이디 찾기</router-link>
+          <v-divider vertical />
+          <router-link to="/find-pw">비밀번호 찾기</router-link>
+          <v-divider vertical />
+          <router-link to="/join">회원가입</router-link>
+        </nav>
       </v-card>
     </v-main>
   </v-layout>
@@ -89,43 +89,51 @@ const login = async () => {
 
 .header {
   display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 2rem;
+  align-items: start;
+  gap: 0.5rem;
 }
 
 .header h2 {
   font-weight: 700;
-  font-size: 40px;
+  font-size: 2rem;
   line-height: 1;
 }
 
 .header-line {
-  /* (grow, shrink, basis) */
+  display: flex;
+  align-items: end;
+  justify-content: end;
+  padding-bottom: 0.25rem;
   flex: 1 0 0;
   border-bottom: 2px solid black;
-}
-
-.v-divider {
-  height: 16px;
-  background-color: black;
+  height: 1.85rem;
 }
 
 /* 로그인 버튼 */
 .login-button {
   width: 100%;
   height: 56px;
+  font-weight: 500;
+  font-size: 1rem;
   background-color: black;
   color: white;
 }
 
 .find_wrap {
   display: flex;
+  align-items: stretch;
   justify-content: center;
-  text-align: center;
-  gap: 10px;
-  margin-top: 1rem;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.find_wrap>a {
+  color: black;
+  text-decoration: none;
+}
+
+.find_wrap>a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.25rem;
 }
 </style>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useVuelidate } from '@vuelidate/core';
 import { email, helpers, required } from '@vuelidate/validators';
+import { toValue } from 'vue';
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -49,16 +50,17 @@ const check = async () => {
   <v-layout>
     <v-main class="container">
       <form class="find-id-form">
-        <header class="header">
-          <h2>비밀번호 찾기</h2>
+        <header class="header mb-6">
+          <h2>비밀번호 재설정</h2>
           <div class="header-line"></div>
         </header>
+
         <label class="font-label">아이디</label>
         <v-text-field :error-messages="v$.id.$errors.map((e) => '아이디를 입력하세요')" v-model="state.id" rounded="0"
           placeholder="아이디를 입력하세요." variant="outlined" required></v-text-field>
 
         <label class="font-label">이메일</label>
-        <v-text-field :error-messages="v$.email.$errors.map((e) => '이메일을 입력하세요')" v-model="state.email" rounded="0"
+        <v-text-field :error-messages="v$.email.$errors.map((e) => toValue(e.$message))" v-model="state.email" rounded="0"
           placeholder="이메일을 입력하세요." variant="outlined" required></v-text-field>
         <div class="buttons">
           <v-btn rounded="0" variant="outlined" class="reset-button" @click="clear()">초기화</v-btn>
@@ -88,42 +90,47 @@ const check = async () => {
 
 .header {
   display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 2rem;
+  align-items: start;
+  gap: 0.5rem;
 }
 
 .header h2 {
   font-weight: 700;
-  font-size: 40px;
+  font-size: 2rem;
   line-height: 1;
 }
 
 .header-line {
+  display: flex;
+  align-items: end;
+  justify-content: end;
+  padding-bottom: 0.25rem;
   flex: 1 0 0;
   border-bottom: 2px solid black;
+  height: 1.85rem;
 }
 
 .font-label {
-  font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .buttons {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin-top: 1rem;
 }
 
 .reset-button {
   height: 56px;
+  font-size: 1rem;
+  font-weight: 500;
 }
 
 .find-id-button {
   height: 56px;
+  font-size: 1rem;
+  font-weight: 500;
   background-color: black;
   color: white;
 }
