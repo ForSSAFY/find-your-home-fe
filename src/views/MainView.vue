@@ -53,7 +53,7 @@ const search = () => {
     alert("검색어를 입력해주세요")
   }
   else {
-    router.push({ name: 'search', query: { query: searchWord.value } })
+    router.push({ name: 'search', query: { search: searchWord.value } })
   }
 }
 </script>
