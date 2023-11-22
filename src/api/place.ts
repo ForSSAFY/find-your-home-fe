@@ -66,11 +66,11 @@ export function getSidogunInArea(
 
 export type Nearby =
   | {
-      type: 'store' | 'park' | 'charger'
+      type: 'store' | 'charger'
       minutes: number
     }
   | {
-      type: 'subway'
+      type: 'subway' | 'park'
       name: string
       minutes: number
     }

@@ -27,8 +27,6 @@ watch(() => route.params.id, (id) => {
 function onCloseClick() {
   // 선택된 마커 제거
   activeId.value = '';
-  router.back()
-  if (Math.random() < 2) return
   if (route.query.back) {
     // 이전 경로가 있으면 거기로 이동
     const path = decodeURIComponent(route.query.back.toString())
@@ -123,7 +121,7 @@ function toPriceString(price: number): string {
           <li class="apt-nearby__item" v-if="item.type === 'park'">
             <v-icon color="green" icon="nature_people" />
             <span>
-              공원까지 걸어서
+              <span class="text-green font-weight-bold">{{ item.name }}</span>까지 걸어서
               <span class="text-green font-weight-bold">{{ item.minutes }}분</span>
             </span>
           </li>
