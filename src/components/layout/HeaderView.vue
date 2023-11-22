@@ -1,59 +1,80 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
-const router = useRouter()
-
-const goNews = () => {
-  router.push({name:'news'})
-}
-
 </script>
 
 <template>
-    <v-app-bar :elevation="3">
-      <div class="wrapper">
-        <v-app-bar-title class="logo">
-          <router-link :to="{ name: 'main' }">
-            <v-img src="/src/assets/logo.PNG"></v-img>
-          </router-link>
-        </v-app-bar-title>
-        <div class="menu">
-          <v-btn>Find Your Home</v-btn>
-          <v-btn>관심 지역</v-btn>
-          <v-btn @click="goNews()">뉴스</v-btn>
-        </div>
-        <div class="login">
-          <router-link :to="{ name: 'login' }"><v-btn rounded="0">로그인</v-btn></router-link>
-          <router-link :to="{ name: 'join' }"><v-btn rounded="0">회원가입</v-btn></router-link>
-        </div>
+  <v-app-bar :elevation="4" :height="72">
+    <div class="wrapper">
+      <v-app-bar-title>
+        <router-link :to="{ name: 'main' }" class="logo">
+          FIND YOUR HOME
+        </router-link>
+      </v-app-bar-title>
+
+      <nav class="menu">
+        <v-btn rounded="0" :to="{ name: 'map' }" class="menu-item">
+          아파트
+        </v-btn>
+        <v-btn rounded="0" class="menu-item">
+          관심 지역
+          <v-tooltip activator="parent" location="bottom">추후 개발 예정</v-tooltip>
+        </v-btn>
+        <v-btn rounded="0" :to="{ name: 'news' }" class="menu-item">
+          뉴스
+        </v-btn>
+      </nav>
+
+      <div class="login-wrapper">
+        <v-btn variant="elevated" rounded="0" :to="{ name: 'login' }" class="login">로그인</v-btn>
+        <v-btn variant="outlined" rounded="0" :to="{ name: 'join' }" class="join">회원가입</v-btn>
       </div>
-    </v-app-bar>
+    </div>
+  </v-app-bar>
 </template>
 
 <style scoped>
 .wrapper {
   display: grid;
-  grid-template-columns: 200px 1fr 1fr;
-  max-width: 1300px;
+  grid-template-columns: min-content auto auto;
+  gap: 2rem;
+  max-width: 1200px;
   width: 100%;
   align-items: center;
-  padding: 1vh;
   margin: 0 auto;
 }
+
 .logo {
-  text-align: center;
-  max-width: 200px;
+  width: 15rem;
+  font-weight: 900;
+  font-size: 24px;
+  color: rgba(0, 0, 0, 1);
+  text-decoration: none;
+  padding: 1rem 0.5rem;
+}
+
+.menu-item {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.login-wrapper {
+  display: flex;
+  justify-content: end;
+  gap: 0.5rem;
 }
 
 .login {
-  display: flex;
-  justify-content: end;
-  gap: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  height: auto;
+  color: white;
+  background-color: black;
 }
 
-.login button {
-  background-color: black;
-  color: white;
-  font-size: 16px;
+.join {
+  font-size: 1rem;
   font-weight: 700;
+  padding: 0.5rem 1rem;
+  height: auto;
 }
 </style>
