@@ -4,7 +4,7 @@ const news = defineProps < { title: string, description: string, imgurl: string,
 </script>
 
 <template>
-  <a :href="href" class="news-card">
+  <a :href="href" class="link">
     <v-img height="15rem" :src="news.imgurl" cover></v-img>
 
     <v-card-title> {{ news.title }} </v-card-title>
@@ -14,14 +14,7 @@ const news = defineProps < { title: string, description: string, imgurl: string,
 </template>
 
 <style scoped>
-.news-card{
-  padding: 1rem;
-  color: black;
-  text-decoration: none;
-  transition-duration: 300ms;
-}
+.link{
 
-.news-card:hover{
-  box-shadow: 0 10px 20px rgb(0,0,0,0.38);
 }
 </style>

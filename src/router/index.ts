@@ -40,6 +40,38 @@ const router = createRouter({
               component: () => import('@/views/QnaWriteView.vue')
             }
           ]
+        },
+        {
+          path: '/notice',
+          name: 'notice',
+          redirect: { name: 'list' },
+          children: [
+            {
+              path: 'view/:no',
+              name: 'view',
+              component: () => import('@/views/notice/NoticeView.vue')
+            },
+            {
+              path: 'list',
+              name: 'list',
+              component: () => import('@/views/notice/NoticeListView.vue')
+            },
+            {
+              path: 'edit/:no',
+              name: 'edit',
+              component: () => import('@/views/notice/NoticeEditView.vue')
+            },
+            {
+              path: 'write',
+              name: 'write',
+              component: () => import('@/views/notice/NoticeWriteView.vue')
+            }
+          ]
+        },
+        {
+          path: '/news',
+          name: 'news',
+          component: () => import('@/views/news/NewsListView.vue')
         }
       ]
     },
@@ -47,12 +79,32 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('@/views/LoginView.vue')
+      component: () => import('@/views/user/LoginView.vue')
     },
     {
       path: '/join',
       name: 'join',
-      component: () => import('@/views/JoinView.vue')
+      component: () => import('@/views/user/JoinView.vue')
+    },
+    {
+      path: '/find-id',
+      name: 'find-id',
+      component: () => import('@/views/user/FindIdView.vue'),
+    },
+    {
+      path: '/find-id/complete',
+      name: 'find-id-complete',
+      component: () => import('@/views/user/FindIdCompleteView.vue'),
+    },
+    {
+      path: '/find-pw',
+      name: 'find-pw',
+      component: () => import('@/views/user/FindPasswordView.vue'),
+    },
+    {
+      path: '/find-pw/complete',
+      name: 'find-pw-complete',
+      component: () => import('@/views/user/FindPasswordCompleteView.vue'),
     },
     {
       path: '/map',
