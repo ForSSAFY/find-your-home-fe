@@ -3,8 +3,9 @@ import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
-import router from '@/router';
+import { doLogin } from '@/api/login';
 
+const router = useRouter()
 const visible = ref(false)
 
 //props 역할
@@ -32,9 +33,10 @@ const v$ = useVuelidate(rules, state)
 const login = async() => {
   const isFormCorrect = await v$.value.$validate();
   if (!isFormCorrect) return;
-  router.push({name:'main'})
+  doLogin(state)
+    .then(() => router.push({ name: 'main' }))
+  .catch((err)=> alert('로그인 실패!' + err))
 }
-
 </script>
 
 <template>
