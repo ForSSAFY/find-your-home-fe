@@ -58,7 +58,6 @@ const search = () => {
 }
 </script>
 <template>
-  <v-main>
     <div class="main-video">
       <video src="\src\assets\cityview.mp4" muted loop autoplay playsinline></video>
       <!-- <img src="\src\assets\sample.jpg" /> -->
@@ -86,7 +85,7 @@ const search = () => {
 
     <div class="next-screen">
       <div class="main-news">
-        <div class="header">
+        <div class="header news-header">
           <h2>뉴스</h2>
           <div class="header-more-box">
             <router-link :to="{name:'news'}" class="header-more">더보기<v-icon icon="add"></v-icon></router-link>
@@ -111,7 +110,6 @@ const search = () => {
         </table>
       </div>
     </div>
-  </v-main>
 </template>
 
 <style scoped>
@@ -192,7 +190,6 @@ video {
   align-items: baseline;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: 1rem;
 }
 
 .header h2{
@@ -218,6 +215,9 @@ video {
 }
 
 /* 뉴스 화면 */
+.news-header{
+  margin-bottom: 1rem;
+}
 .main-news-detail {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
