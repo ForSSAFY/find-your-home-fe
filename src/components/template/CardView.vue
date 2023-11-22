@@ -1,6 +1,5 @@
 <script setup lang="ts">
-const news = defineProps < { title: string, description: string, imgurl: string, href: string }
->()
+const news = defineProps<{ title: string; description: string; imgurl: string; href: string }>()
 </script>
 
 <template>
@@ -14,14 +13,15 @@ const news = defineProps < { title: string, description: string, imgurl: string,
 </template>
 
 <style scoped>
-.news-card{
+.news-card {
   padding: 1rem;
+  text-align: center;
   color: black;
   text-decoration: none;
   transition-duration: 300ms;
 }
 
-.news-card:hover{
-  box-shadow: 0 10px 20px rgb(0,0,0,0.38);
+.news-card:hover {
+  box-shadow: 0 10px 20px rgb(0, 0, 0, 0.38);
 }
 </style>

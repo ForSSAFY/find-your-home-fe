@@ -29,5 +29,6 @@ import FooterView from '@/components/layout/FooterView.vue'
 
 .filler {
   flex: 1 0;
+  min-height: 10rem;
 }
 </style>
