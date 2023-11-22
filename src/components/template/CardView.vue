@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const news = defineProps < { title: string, subtitle: string, imgurl: string, href: string }
+const news = defineProps < { title: string, description: string, imgurl: string, href: string }
 >()
 </script>
 
@@ -9,7 +9,7 @@ const news = defineProps < { title: string, subtitle: string, imgurl: string, hr
 
     <v-card-title> {{ news.title }} </v-card-title>
 
-    <v-card-subtitle> {{ news.subtitle }} </v-card-subtitle>
+    <v-card-subtitle> {{ news.description }} </v-card-subtitle>
   </a>
 </template>
 
