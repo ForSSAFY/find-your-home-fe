@@ -9,7 +9,11 @@ import { RouterView } from 'vue-router';
 </template>
 
 <style>
-html>body{
+html {
+  overflow-y: auto !important;
+}
+
+html > body {
   font-family: 'Pretendard Variable';
 }
 

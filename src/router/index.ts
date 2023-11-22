@@ -106,6 +106,23 @@ const router = createRouter({
       name: 'find-pw-complete',
       component: () => import('@/views/user/FindPasswordCompleteView.vue'),
     },
+    {
+      path: '/map',
+      name: 'map',
+      component: () => import('@/views/map/MapView.vue'),
+      children: [
+        {
+          path: 'apt/:id',
+          name: 'apt',
+          component: () => import('@/views/map/MapAptInfoView.vue')
+        },
+        {
+          path: '', // ?query=...
+          name: 'search',
+          component: () => import('@/views/map/MapSearchView.vue')
+        }
+      ]
+    }
   ]
 })
 
