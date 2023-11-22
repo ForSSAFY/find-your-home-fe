@@ -88,7 +88,7 @@ function onMarkerClick(marker: Apt | Sidogun & { level: number }) {
     updateVisibleMarkers()
   } else { // Apt 마커 클릭
     // MapAptInfoView로 처리 위임
-    router.push({ name: 'apt', params: { id: marker.id } })
+    router.push({ name: 'apt', params: { id: marker.id }, query: route.query.search ? { back: encodeURIComponent(route.fullPath) } : undefined })
   }
 }
 </script>

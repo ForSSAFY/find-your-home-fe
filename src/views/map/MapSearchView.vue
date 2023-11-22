@@ -1,13 +1,13 @@
 <script setup lang="ts">
+import { searchAnything, type SearchResult } from '@/api/place'
 import { debounce } from '@/utils/debounce'
 import { inject, ref, shallowRef, watch } from 'vue'
 import type { LatLng } from 'vue-kakao-maps'
+import { useRoute, useRouter } from 'vue-router'
 import type { MapViewContext } from './MapView.vue'
 import SearchBox from './SearchBox.vue'
-import { useRoute, useRouter } from 'vue-router'
-import { searchAnything, type SearchResult } from '@/api/place'
 
-const { center, level } = inject<MapViewContext>('mapView')!
+const { signalCenter, center, signalLevel, level } = inject<MapViewContext>('mapView')!
 
 const route = useRoute()
 const router = useRouter()
@@ -17,23 +17,43 @@ const input = ref('');
 const result = shallowRef<SearchResult | undefined>()
 watch(() => route.query.search, search => {
   if (!search) return
+  document.title = `${search} - 검색 결과`
   searchAnything(search.toString())
     .then(res => result.value = res.data)
-    .catch(() => result.value = undefined)
+    .catch(() => result.value = [])
 }, { immediate: true })
 
 function handleSubmit(query: string) {
+  if (!query) {
+    const { search, ...query } = route.query
+    router.push({ query })
+    result.value = undefined
+    return
+  }
   input.value = query
   router.push({
     name: 'search',
-    query: { search: query.trim(), lat: center.value.lat, lng: center.value.lng, level: level.value }
+    query: { ...route.query, search: query.trim() }
   })
+}
+
+// ========== 검색 아이템 클릭 ==========
+function handleClick(res: SearchResult[0]) {
+  signalCenter.value = { lat: res.lat, lng: res.lng }
+  if (res.type === 'apt') {
+    const path = encodeURIComponent(route.fullPath)
+    console.log(path)
+    router.push({ name: 'apt', params: { id: res.id }, query: { back: path } })
+  } else if (res.type === 'location') {
+    signalLevel.value = 4
+  } else {
+    signalLevel.value = Math.min(4, level.value)
+  }
 }
 
 // ========== 화면 좌표 업데이트 ==========
 const updateUrl = (center: LatLng, level: number) => {
-  const search = input.value ? { search: input.value } : {};
-  router.replace({ query: { ...search, lat: center.lat, lng: center.lng, level } })
+  router.replace({ query: { ...route.query, lat: center.lat, lng: center.lng, level } })
 }
 const debounceUpdateUrl = debounce(updateUrl, 100)
 
@@ -50,18 +70,18 @@ watch(level, (level) => {
 <template>
   <div class="sidebar-container">
     <div>
-      <SearchBox @search="handleSubmit" />
+      <SearchBox :initial-value="$route.query.search?.toString()" @search="handleSubmit" />
 
       <v-divider />
       <div v-if="result?.length ?? 0 > 0" class="search-label">검색 결과</div>
     </div>
     <div v-if="result?.length ?? 0 > 0" class="search-result">
       <template v-for="res, i in result" :key="i">
-        <v-btn elevation="0" rounded="0" class="search-item-btn">
+        <v-btn elevation="0" rounded="0" class="search-item-btn" @click="() => handleClick(res)">
           <div class="search-item">
             <v-icon v-if="res.type === 'location'" icon="location_on" />
-            <v-icon v-if="res.type === 'subway'" icon="subway" />
-            <v-icon v-if="res.type === 'apt'" icon="house" />
+            <v-icon v-if="res.type === 'subway'" icon="tram" />
+            <v-icon v-if="res.type === 'apt'" icon="home" />
             <div class="search-item__content">
               <div class="search-item__title">{{ res.name }}</div>
               <div v-if="res.address" class="search-item__desc">{{ res.address }}</div>
@@ -72,7 +92,7 @@ watch(level, (level) => {
       </template>
     </div>
 
-    <!-- <div v-if="result === undefined" class="ma-6" style="color: rgba(0, 0, 0, 0.7)">검색어를 입력해주세요.</div> -->
+    <div v-if="result === undefined" class="ma-6" style="color: rgba(0, 0, 0, 0.7)">검색어를 입력해주세요.</div>
 
     <div v-if="result?.length === 0" class="ma-6" style="color: rgba(0, 0, 0, 0.7)">검색 결과가 없습니다.</div>
   </div>

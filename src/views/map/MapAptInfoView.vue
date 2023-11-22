@@ -17,6 +17,7 @@ watch(() => route.params.id, (id) => {
   getAptInfo(activeId.value)
     .then(res => info.value = res.data)
     .then(apt => {
+      document.title = `'${apt.name}' 정보`
       signalCenter.value = { lat: apt.lat, lng: apt.lng }
       signalLevel.value = Math.min(level.value, 4);
     })
@@ -26,15 +27,23 @@ watch(() => route.params.id, (id) => {
 function onCloseClick() {
   // 선택된 마커 제거
   activeId.value = '';
-  // 현재 좌표로 메인화면으로 이동
-  router.push({
-    name: 'search',
-    query: {
-      lat: center.value.lat,
-      lng: center.value.lng,
-      level: level.value
-    }
-  })
+  router.back()
+  if (Math.random() < 2) return
+  if (route.query.back) {
+    // 이전 경로가 있으면 거기로 이동
+    const path = decodeURIComponent(route.query.back.toString())
+    router.push(path)
+  } else {
+    // 현재 좌표로 메인화면으로 이동
+    router.push({
+      name: 'search',
+      query: {
+        lat: center.value.lat,
+        lng: center.value.lng,
+        level: level.value
+      }
+    })
+  }
 }
 
 function toPriceString(price: number): string {
@@ -98,7 +107,7 @@ function toPriceString(price: number): string {
       <ul class="apt-nearby">
         <template v-for="(item, i) of info.nearby" :key="i">
           <li class="apt-nearby__item" v-if="item.type === 'subway'">
-            <v-icon v-if="item.type === 'subway'" color="grey-darken-1" icon="subway" />
+            <v-icon v-if="item.type === 'subway'" color="grey-darken-1" icon="tram" />
             <span>
               <span class="text-grey-darken-2 font-weight-bold">{{ item.name }}</span>까지 걸어서
               <span class="text-grey-darken-1 font-weight-bold">{{ item.minutes }}분</span>

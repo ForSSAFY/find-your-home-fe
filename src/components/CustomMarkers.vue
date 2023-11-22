@@ -63,8 +63,10 @@ watch(
     for (const [id, overlay] of Object.entries(overlays)) {
       if (id === activeId) {
         overlay.getContent().classList.add('marker--hover')
+        overlay.setZIndex(ZINDEX_HOVER)
       } else {
         overlay.getContent().classList.remove('marker--hover')
+        overlay.setZIndex(ZINDEX)
       }
     }
   }, { immediate: true, flush: 'post' }

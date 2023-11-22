@@ -25,28 +25,6 @@ export type SidogunRes = {
   level: number
 }
 
-export interface AptInfo {
-  id: string
-  buildYear: number
-  // roadName: string
-  // roadNameBonbun: string
-  // roadNameBubun: string
-  // roadNameSeq: string
-  // roadNameBasementCode: string
-  // roadNameCode: string
-  dong: string
-  bonbun: string
-  bubun: string
-  sigunguCode: string
-  eubmyundongCode: string
-  dongCode: string
-  landCode: string
-  apartmentName: string
-  jibun: string
-  lat: number
-  lng: number
-}
-
 const axios = localAxios()
 const path = import.meta.env.VITE_VUE_API_URL + '/place'
 
@@ -108,8 +86,10 @@ export interface AptInfo {
   id: string
   name: string
   address: string
+  lat: number
+  lng: number
   date: string
-  area: number
+  area: string
   price: number
   nearby: Nearby[]
   deals: Deal[]
@@ -120,12 +100,15 @@ export function getAptInfo(id: string) {
 }
 
 export type SearchResult = {
+  id: string
   type: 'location' | 'subway' | 'apt'
   name: string
+  lat: number
+  lng: number
   /** 주소, location일 경우 undefined */
   address?: string
 }[]
 
 export function searchAnything(query: string) {
-  return axios.get<SearchResult>(path + '/search', { params: { query } })
+  return axios.get<SearchResult>(path + '/search', { params: { keyword: query } })
 }

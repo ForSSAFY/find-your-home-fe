@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
+const props = defineProps<{ initialValue?: string }>()
+
 const emit = defineEmits<{
   'search': [value: string]
 }>()
 
-const value = ref('')
+const value = ref(props.initialValue ?? '')
 </script>
 
 <template>
