@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
-import { useRouter } from 'vue-router';
-import { useVuelidate } from '@vuelidate/core'
-import { required } from '@vuelidate/validators'
 import { doLogin } from '@/api/login';
+import { useVuelidate } from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
+import { reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const router = useRouter()
 const visible = ref(false)
@@ -30,57 +30,44 @@ const rules = {
 
 const v$ = useVuelidate(rules, state)
 
-const login = async() => {
+const login = async () => {
   const isFormCorrect = await v$.value.$validate();
   if (!isFormCorrect) return;
   doLogin(state)
     .then(() => router.push({ name: 'main' }))
-  .catch((err)=> alert('로그인 실패!' + err))
+    .catch((err) => alert('로그인 실패!' + err))
 }
 </script>
 
 <template>
-  <v-main class="container">
-    <v-card class="login-form" rounded="0">
-      <div class="header">
-        <h2>로그인</h2>
-        <div class="header-line"></div>
-      </div>
+  <v-layout>
+    <v-main class="container">
+      <v-card class="login-form" rounded="0">
+        <div class="header">
+          <h2>로그인</h2>
+          <div class="header-line"></div>
+        </div>
 
-      <v-text-field
-        :error-messages="v$.id.$errors.map((e) => '아이디를 입력하세요.')"
-        v-model="state.id"
-        rounded="0"
-        density="comfortable"
-        placeholder="아이디"
-        prepend-inner-icon="person"
-        variant="outlined"
-      ></v-text-field>
+        <v-text-field :error-messages="v$.id.$errors.map((e) => '아이디를 입력하세요.')" v-model="state.id" rounded="0"
+          density="comfortable" placeholder="아이디" prepend-inner-icon="person" variant="outlined"></v-text-field>
 
-      <v-text-field
-        :append-inner-icon="visible ? 'visibility_off' : 'visibility'"
-        :type="visible ? 'text' : 'password'"
-        :error-messages="v$.password.$errors.map((e) => '비밀번호를 입력하세요')"
-        v-model="state.password"
-        rounded="0"
-        density="comfortable"
-        placeholder="비밀번호"
-        prepend-inner-icon="lock"
-        variant="outlined"
-        @click:append-inner="visible = !visible"
-      ></v-text-field>
+        <v-text-field :append-inner-icon="visible ? 'visibility_off' : 'visibility'" :type="visible ? 'text' : 'password'"
+          :error-messages="v$.password.$errors.map((e) => '비밀번호를 입력하세요')" v-model="state.password" rounded="0"
+          density="comfortable" placeholder="비밀번호" prepend-inner-icon="lock" variant="outlined"
+          @click:append-inner="visible = !visible"></v-text-field>
 
-      <v-btn class="login-button" rounded="0" @click="login()">로그인</v-btn>
+        <v-btn class="login-button" rounded="0" @click="login()">로그인</v-btn>
 
-      <div class="find_wrap">
-        <router-link to="/find-id" class="text-decoration-none">아이디 찾기</router-link>
-        <v-divider inset vertical></v-divider>
-        <router-link to="/find-pw" class="text-decoration-none">비밀번호 찾기</router-link>
-        <v-divider inset vertical></v-divider>
-        <router-link to="/join" class="text-decoration-none">회원 가입</router-link>
-      </div>
-    </v-card>
-  </v-main>
+        <div class="find_wrap">
+          <router-link to="/find-id" class="text-decoration-none">아이디 찾기</router-link>
+          <v-divider inset vertical></v-divider>
+          <router-link to="/find-pw" class="text-decoration-none">비밀번호 찾기</router-link>
+          <v-divider inset vertical></v-divider>
+          <router-link to="/join" class="text-decoration-none">회원 가입</router-link>
+        </div>
+      </v-card>
+    </v-main>
+  </v-layout>
 </template>
 
 <style scoped>
@@ -92,6 +79,7 @@ const login = async() => {
   justify-content: center;
   padding: 2rem;
 }
+
 .login-form {
   max-width: 600px;
   width: 100%;

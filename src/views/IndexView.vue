@@ -4,21 +4,30 @@ import FooterView from '@/components/layout/FooterView.vue'
 </script>
 
 <template>
+  <v-layout class="layout">
     <HeaderView />
     <v-main class="main">
       <router-view></router-view>
       <div class="filler"></div>
       <FooterView />
     </v-main>
+  </v-layout>
 </template>
 
 <style scoped>
-  .main {
-    display: flex;
-    flex-direction: column;
-  }
+.layout {
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 
-  .filler {
-    flex: 1 0;
-  }
+.main {
+  display: flex;
+  flex-direction: column;
+}
+
+.filler {
+  flex: 1 0;
+}
 </style>

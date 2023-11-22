@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { useRouter } from 'vue-router'
-import { useVuelidate } from '@vuelidate/core'
-import { required, email, helpers } from '@vuelidate/validators'
+import { useVuelidate } from '@vuelidate/core';
+import { email, helpers, required } from '@vuelidate/validators';
+import { reactive } from 'vue';
+import { useRouter } from 'vue-router';
 
 const router = useRouter()
 
@@ -34,7 +34,7 @@ function clear() {
   v$.value.$reset()
 
   for (const [key, value] of Object.entries(initialState)) {
-    state[key] = value
+    state[key as keyof typeof initialState] = value
   }
 }
 
@@ -46,37 +46,27 @@ const check = async () => {
 </script>
 
 <template>
-  <v-main class="container">
-    <form class="find-id-form">
-      <header class="header">
-        <h2>비밀번호 찾기</h2>
-        <div class="header-line"></div>
-      </header>
-      <label class="font-label">아이디</label>
-      <v-text-field
-        :error-messages="v$.id.$errors.map((e) => '아이디를 입력하세요')"
-        v-model="state.id"
-        rounded="0"
-        placeholder="아이디를 입력하세요."
-        variant="outlined"
-        required
-      ></v-text-field>
+  <v-layout>
+    <v-main class="container">
+      <form class="find-id-form">
+        <header class="header">
+          <h2>비밀번호 찾기</h2>
+          <div class="header-line"></div>
+        </header>
+        <label class="font-label">아이디</label>
+        <v-text-field :error-messages="v$.id.$errors.map((e) => '아이디를 입력하세요')" v-model="state.id" rounded="0"
+          placeholder="아이디를 입력하세요." variant="outlined" required></v-text-field>
 
-      <label class="font-label">이메일</label>
-      <v-text-field
-        :error-messages="v$.email.$errors.map((e) => '이메일을 입력하세요')"
-        v-model="state.email"
-        rounded="0"
-        placeholder="이메일을 입력하세요."
-        variant="outlined"
-        required
-      ></v-text-field>
-      <div class="buttons">
-        <v-btn rounded="0" variant="outlined" class="reset-button" @click="clear()">초기화</v-btn>
-        <v-btn rounded="0" class="find-id-button" @click="check()">다음</v-btn>
-      </div>
-    </form>
-  </v-main>
+        <label class="font-label">이메일</label>
+        <v-text-field :error-messages="v$.email.$errors.map((e) => '이메일을 입력하세요')" v-model="state.email" rounded="0"
+          placeholder="이메일을 입력하세요." variant="outlined" required></v-text-field>
+        <div class="buttons">
+          <v-btn rounded="0" variant="outlined" class="reset-button" @click="clear()">초기화</v-btn>
+          <v-btn rounded="0" class="find-id-button" @click="check()">다음</v-btn>
+        </div>
+      </form>
+    </v-main>
+  </v-layout>
 </template>
 
 <style scoped>

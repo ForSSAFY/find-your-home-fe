@@ -108,7 +108,7 @@ function convertLatLng(x: number, y: number, z: number) {
 </script>
 
 <template>
-  <div style="width: 100%; min-height: 100vh">
+  <v-layout style="min-height: 100vh; height: 100vh;">
     <!-- Header -->
     <v-app-bar :elevation="0" :height="76" style="padding: 0 1rem; border-bottom: 1px solid rgba(0, 0, 0, 0.12)">
       <div style="
@@ -142,7 +142,7 @@ function convertLatLng(x: number, y: number, z: number) {
     <!-- Main -->
     <v-main style="height: 100%; position: relative;">
       <!-- Map -->
-      <KakaoMap pan :center="signalCenter" :level="signalLevel" style="height: 100%"
+      <KakaoMap pan :center="signalCenter" :level="signalLevel" style="width: 100%; height: 100%"
         @center_changed="({ center: c }) => (center = c)" @zoom_changed="({ level: l }) => (level = l)"
         @bounds_changed="({ bounds: b }) => (bounds = b)" @load="onMapLoad">
         <CustomMarkers :markers="markers" :LatLng="KakaoLatLng" :CustomOverlay="CustomOverlay" :active-id="activeId"
@@ -175,7 +175,7 @@ function convertLatLng(x: number, y: number, z: number) {
         </v-btn-toggle>
       </v-card>
     </v-main>
-  </div>
+  </v-layout>
 </template>
 
 <style scoped></style>

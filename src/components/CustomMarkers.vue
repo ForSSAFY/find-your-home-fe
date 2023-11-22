@@ -119,5 +119,3 @@ function createContent(marker: Apt | Sidogun & { level: number }, overlay: typeo
 <template>
   <slot></slot>
 </template>
-
-<style></style>
