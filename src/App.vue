@@ -3,7 +3,7 @@ import { RouterView } from 'vue-router';
 </script>
 
 <template>
-  <v-layout>
+  <v-layout class="layout">
     <router-view></router-view>
   </v-layout>
 </template>
@@ -11,5 +11,12 @@ import { RouterView } from 'vue-router';
 <style>
 html>body{
   font-family: 'Pretendard Variable';
+}
+
+.layout {
+  min-height: 100vh;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 </style>
