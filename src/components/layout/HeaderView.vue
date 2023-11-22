@@ -9,7 +9,6 @@ const goNews = () => {
 </script>
 
 <template>
-  <header>
     <v-app-bar :elevation="3">
       <div class="wrapper">
         <v-app-bar-title class="logo">
@@ -28,7 +27,6 @@ const goNews = () => {
         </div>
       </div>
     </v-app-bar>
-  </header>
 </template>
 
 <style scoped>
