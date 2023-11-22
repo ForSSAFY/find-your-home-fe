@@ -127,7 +127,7 @@ const visible = ref(false)
         <v-btn rounded="0" class="duplicate-check-button">이메일 인증</v-btn>
       </div>
 
-      <label class="font-label">닉네임</label>s
+      <label class="font-label">닉네임</label>
       <div class="join-form-row">
         <v-text-field
           :error-messages="v$.nickname.$errors.map((e) => e.$message)"
