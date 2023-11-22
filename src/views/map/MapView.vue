@@ -110,29 +110,31 @@ function convertLatLng(x: number, y: number, z: number) {
 <template>
   <v-layout style="min-height: 100vh; height: 100vh;">
     <!-- Header -->
-    <v-app-bar :elevation="0" :height="76" style="padding: 0 1rem; border-bottom: 1px solid rgba(0, 0, 0, 0.12)">
-      <div style="
-          display: flex;
-          align-items: center;
-          margin: 0 2rem 0 1rem;
-          font-size: 24px;
-          font-weight: 800;
-        ">
-        FIND YOUR HOME
-      </div>
-      <v-slide-group>
-        <v-slide-group-item>
-          <v-btn rounded="0" style="font-size: 16px">아파트</v-btn>
-        </v-slide-group-item>
-        <v-slide-group-item>
-          <v-btn rounded="0" style="font-size: 16px">관심 지역
+    <v-app-bar :elevation="0" :height="72" style="border-bottom: solid 1px rgba(0, 0, 0, 0.12);">
+      <div class="wrapper">
+        <v-app-bar-title>
+          <router-link :to="{ name: 'main' }" class="logo">
+            FIND YOUR HOME
+          </router-link>
+        </v-app-bar-title>
+
+        <nav class="menu">
+          <v-btn rounded="0" class="menu-item">
+            아파트
+          </v-btn>
+          <v-btn rounded="0" class="menu-item">
+            관심 지역
             <v-tooltip activator="parent" location="bottom">추후 개발 예정</v-tooltip>
           </v-btn>
-        </v-slide-group-item>
-      </v-slide-group>
-      <div style="display: flex; justify-content: end; margin-left: auto; gap: 1rem">
-        <v-btn variant="outlined" rounded="0">로그인</v-btn>
-        <v-btn variant="elevated" rounded="0" :elevation="0">회원가입</v-btn>
+          <v-btn rounded="0" :to="{ name: 'news' }" class="menu-item">
+            뉴스
+          </v-btn>
+        </nav>
+
+        <div class="login-wrapper">
+          <v-btn variant="elevated" rounded="0" :to="{ name: 'login' }" class="login">로그인</v-btn>
+          <v-btn variant="outlined" rounded="0" :to="{ name: 'join' }" class="join">회원가입</v-btn>
+        </div>
       </div>
     </v-app-bar>
     <!-- Sidebar -->
@@ -178,4 +180,50 @@ function convertLatLng(x: number, y: number, z: number) {
   </v-layout>
 </template>
 
-<style scoped></style>
+<style scoped>
+.wrapper {
+  display: grid;
+  grid-template-columns: min-content auto auto;
+  gap: 2rem;
+  padding: 0 1rem;
+  width: 100%;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.logo {
+  width: 15rem;
+  font-weight: 900;
+  font-size: 24px;
+  color: rgba(0, 0, 0, 1);
+  text-decoration: none;
+  padding: 1rem 0.5rem;
+}
+
+.menu-item {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.login-wrapper {
+  display: flex;
+  justify-content: end;
+  gap: 0.5rem;
+}
+
+.login {
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  height: auto;
+  color: white;
+  background-color: black;
+}
+
+.join {
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.5rem 1rem;
+  height: auto;
+}
+</style>
