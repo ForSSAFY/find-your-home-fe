@@ -33,6 +33,7 @@ function onCloseClick() {
     router.push(path)
   } else {
     // 현재 좌표로 메인화면으로 이동
+    document.title = "FIND YOUR HOME"
     router.push({
       name: 'search',
       query: {

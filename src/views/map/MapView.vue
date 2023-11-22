@@ -7,6 +7,7 @@ import {
   KakaoMap,
   ZoomControl,
   useKakaoLoader,
+  Tileset,
   type LatLng,
   type LatLngBounds
 } from 'vue-kakao-maps'
@@ -16,6 +17,8 @@ useKakaoLoader({ appKey: import.meta.env.VITE_KAKAO_JAVASCRIPT_APP_KEY, librarie
 
 const route = useRoute()
 const router = useRouter()
+
+document.title = "FIND YOUR HOME"
 
 // ========== 지도 상태 변동하는 변수들 ==========
 const signalCenter = shallowRef<LatLng>({
@@ -55,15 +58,9 @@ watch(bounds, () => {
 // apt: MapAptInfoView에서 설정
 // search: MapSearchView에서 설정
 
-
-
-// ---------- 아파트|시도군요약 정보들 요청 ----------
-// updateApts: KakaoMap.load 이벤트에 한 번 호출됨
-// 현재 화면 zoom zoom에 따라 다른 API 요청해야 함
-
-
 const KakaoLatLng = shallowRef(undefined)
 const CustomOverlay = shallowRef(undefined)
+const Coords = shallowRef(undefined)
 
 // 유틸 함수
 function flatLatLngBounds(bounds: LatLngBounds): [number, number, number, number] {
@@ -77,6 +74,8 @@ function onMapLoad({ bounds }: { bounds: LatLngBounds }) {
   KakaoLatLng.value = window.kakao.maps.LatLng
   // @ts-expect-error
   CustomOverlay.value = window.kakao.maps.CustomOverlay
+  // @ts-expect-error
+  Coords.value = window.kakao.maps.Coords
 }
 
 // 마커 클릭 시 해당 아파트 세부 정보 화면으로 이동
@@ -90,6 +89,21 @@ function onMarkerClick(marker: Apt | Sidogun & { level: number }) {
     // MapAptInfoView로 처리 위임
     router.push({ name: 'apt', params: { id: marker.id }, query: route.query.search ? { back: encodeURIComponent(route.fullPath) } : undefined })
   }
+}
+
+// ========== 오버레이 관리 ==========
+const tiles = ref<'flood' | 'drug' | 'kill' | 'robbery' | 'castle' | 'hit' | undefined>()
+
+// 좌표 변환 함수
+function convertLatLng(x: number, y: number, z: number) {
+  const _z = Math.pow(2, z) * 80
+  const _x = x * _z - 75000
+  const _y = y * _z - 150000
+  // @ts-expect-error
+  const ll1 = new Coords.value(_x, _y).toLatLng()
+  // @ts-expect-error
+  const ll2 = new Coords.value(_x + _z, _y + _z).toLatLng()
+  return [ll1.getLng(), ll1.getLat(), ll2.getLng(), ll2.getLat()]
 }
 </script>
 
@@ -124,16 +138,40 @@ function onMarkerClick(marker: Apt | Sidogun & { level: number }) {
       <router-view />
     </v-navigation-drawer>
     <!-- Main -->
-    <v-main style="height: 100%">
+    <v-main style="height: 100%; position: relative;">
       <!-- Map -->
       <KakaoMap pan :center="signalCenter" :level="signalLevel" style="height: 100%"
         @center_changed="({ center: c }) => (center = c)" @zoom_changed="({ level: l }) => (level = l)"
         @bounds_changed="({ bounds: b }) => (bounds = b)" @load="onMapLoad">
-        <!-- <Marker v-for="m in markers" :key="m.id" :position="m" :z-index="8000" /> -->
         <CustomMarkers :markers="markers" :LatLng="KakaoLatLng" :CustomOverlay="CustomOverlay" :active-id="activeId"
           @marker_click="onMarkerClick" />
         <ZoomControl position="BOTTOMRIGHT" />
+
+        <Tileset :width="256" :height="256" :show="tiles === 'flood'"
+          :url-func="(x, y, z) => `https://geo.safemap.go.kr/geoserver/safemap/wms?LAYERS=A2SM_FLUDMARKS&STYLES=A2SM_FludMarks&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SERVICE=WMS&REQUEST=GetMap&SRS=EPSG%3A4326&BBOX=${convertLatLng(x, y, z).join(',')}&WIDTH=256&HEIGHT=256`" />
+        <Tileset :width="256" :height="256" :show="tiles === 'drug'"
+          :url-func="(x, y, z) => `https://geo.safemap.go.kr/geoserver/safemap/wms?LAYERS=A2SM_CRMNLSTATS&STYLES=A2SM_CrmnlStats_Nrctc&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SERVICE=WMS&REQUEST=GetMap&SRS=EPSG%3A4326&BBOX=${convertLatLng(x, y, z).join(',')}&WIDTH=256&HEIGHT=256`" />
+        <Tileset :width="256" :height="256" :show="tiles === 'kill'"
+          :url-func="(x, y, z) => `https://geo.safemap.go.kr/geoserver/safemap/wms?LAYERS=A2SM_CRMNLSTATS&STYLES=A2SM_CrmnlStats_Murder&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SERVICE=WMS&REQUEST=GetMap&SRS=EPSG%3A4326&BBOX=${convertLatLng(x, y, z).join(',')}&WIDTH=256&HEIGHT=256`" />
+        <Tileset :width="256" :height="256" :show="tiles === 'robbery'"
+          :url-func="(x, y, z) => `https://geo.safemap.go.kr/geoserver/safemap/wms?LAYERS=A2SM_CRMNLSTATS&STYLES=A2SM_CrmnlStats_Brglr&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SERVICE=WMS&REQUEST=GetMap&SRS=EPSG%3A4326&BBOX=${convertLatLng(x, y, z).join(',')}&WIDTH=256&HEIGHT=256`" />
+        <Tileset :width="256" :height="256" :show="tiles === 'castle'"
+          :url-func="(x, y, z) => `https://geo.safemap.go.kr/geoserver/safemap/wms?LAYERS=A2SM_CRMNLSTATS&STYLES=A2SM_CrmnlStats_Rape&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SERVICE=WMS&REQUEST=GetMap&SRS=EPSG%3A4326&BBOX=${convertLatLng(x, y, z).join(',')}&WIDTH=256&HEIGHT=256`" />
+        <Tileset :width="256" :height="256" :show="tiles === 'hit'"
+          :url-func="(x, y, z) => `https://geo.safemap.go.kr/geoserver/safemap/wms?LAYERS=A2SM_CRMNLSTATS&STYLES=A2SM_CrmnlStats_Violn&FORMAT=image%2Fpng&TRANSPARENT=TRUE&SERVICE=WMS&REQUEST=GetMap&SRS=EPSG%3A4326&BBOX=${convertLatLng(x, y, z).join(',')}&WIDTH=256&HEIGHT=256`" />
       </KakaoMap>
+
+      <v-card variant="outlined" rounded="0" color="rgba(0,0,0,0.12)" hover
+        style="position: absolute; top: calc(var(--v-layout-top) + 1.5rem); left: calc(var(--v-layout-left) + 1.5rem); display: flex; z-index: 1;">
+        <v-btn-toggle v-model="tiles">
+          <v-btn value="flood">침수</v-btn>
+          <v-btn value="drug">마약</v-btn>
+          <v-btn value="kill">살인</v-btn>
+          <v-btn value="robbery">강도</v-btn>
+          <v-btn value="castle">성폭력</v-btn>
+          <v-btn value="hit">폭력</v-btn>
+        </v-btn-toggle>
+      </v-card>
     </v-main>
   </div>
 </template>

@@ -16,7 +16,10 @@ const router = useRouter()
 const input = ref('');
 const result = shallowRef<SearchResult | undefined>()
 watch(() => route.query.search, search => {
-  if (!search) return
+  if (!search) {
+    document.title = "FIND YOUR HOME"
+    return
+  }
   document.title = `${search} - 검색 결과`
   searchAnything(search.toString())
     .then(res => result.value = res.data)
