@@ -125,7 +125,9 @@ function convertLatLng(x: number, y: number, z: number) {
           <v-btn rounded="0" style="font-size: 16px">아파트</v-btn>
         </v-slide-group-item>
         <v-slide-group-item>
-          <v-btn rounded="0" style="font-size: 16px">관심 지역</v-btn>
+          <v-btn rounded="0" style="font-size: 16px">관심 지역
+            <v-tooltip activator="parent" location="bottom">추후 개발 예정</v-tooltip>
+          </v-btn>
         </v-slide-group-item>
       </v-slide-group>
       <div style="display: flex; justify-content: end; margin-left: auto; gap: 1rem">
