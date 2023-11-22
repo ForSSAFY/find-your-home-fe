@@ -11,19 +11,19 @@ const lng = ref(0);
 const cards = [
   {
     title: '제목1',
-    subtitle: '부제목1',
+    description: '부제목1',
     imgurl: 'https://imgnews.pstatic.net/image/015/2023/11/17/0004915131_001_20231117082301050.jpg?type=w647',
     href : "https://n.news.naver.com/article/015/0004915131"
   },
   {
     title: '제목2',
-    subtitle: '부제목2',
+    description: '부제목2',
     imgurl: 'https://imgnews.pstatic.net/image/023/2023/11/17/0003799646_001_20231117030316203.jpg?type=w647',
     href : "https://n.news.naver.com/article/015/0004915131"
   },
   {
     title: '제목3',
-    subtitle: '부제목3',
+    description: '부제목3',
     imgurl: 'https://imgnews.pstatic.net/image/015/2023/11/17/0004915131_001_20231117082301050.jpg?type=w647',
     href : "https://n.news.naver.com/article/015/0004915131"
   }
@@ -63,7 +63,7 @@ const search = () => {
       <!-- <img src="\src\assets\sample.jpg" /> -->
       <div class="main-video-container">
         <div class="main-video-text">
-          <h1>Find Your Home</h1>
+          <h1>FIND YOUR HOME</h1>
           <p>우리는 당신이 편하게 쉴 수 있는 집을 찾아 주고 싶습니다.</p>
           <br/>
         </div>
