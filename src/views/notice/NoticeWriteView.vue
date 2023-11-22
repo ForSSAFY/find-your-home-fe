@@ -1,16 +1,29 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { useRouter } from 'vue-router';
+</script>
 <template>
   <v-container class="container">
     <header class="header">
       <h2>공지사항 - 글쓰기</h2>
       <div class="header-line"></div>
     </header>
-   
+    <div class="content">
+      <div>
+        <label for="subject" class="form-label">제목 : </label>
+        <v-text-field variant="outlined" rounded="0" placeholder="제목..."></v-text-field>
+      </div>
+      <div>
+        <label for="content" class="form-label">내용 : </label>
+        <v-textarea variant="outlined" rounded="0" placeholder="내용"></v-textarea>
+      </div>
+      <v-btn @click="$router.push({name:'list'})">글쓰기</v-btn>
+    </div>
   </v-container>
 </template>
 <style scoped>
+/* 헤더 */
 .container {
-  max-width: 1200px;
+  max-width: 800px;
   width: 100%;
 }
 .header {
@@ -33,5 +46,10 @@
   flex: 1 0 0;
   border-bottom: 2px solid black;
   height: 1.85rem;
+}
+
+/* 글쓰기 폼 */
+.content {
+  margin-top: 2rem;
 }
 </style>
