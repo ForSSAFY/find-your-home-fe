@@ -6,7 +6,7 @@ const news = defineProps<{ title: string; description: string; imgurl: string; h
   <v-col>
     <v-card :href="href" class="article" rounded="0">
       <div class="aricle-container">
-        <v-img  class="article-img" :src="news.imgurl"></v-img>
+        <v-img  class="article-img" :src="news.imgurl" cover></v-img>
 
         <div class="article-text">
           <v-card-title class="article-title"> {{ news.title }} </v-card-title>
@@ -33,6 +33,7 @@ const news = defineProps<{ title: string; description: string; imgurl: string; h
 
 .article-img{
   width: 10rem;
+  height: 6rem;
 }
 
 .article-text {
