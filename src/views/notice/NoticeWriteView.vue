@@ -39,11 +39,11 @@ function post() {
     <div class="content">
       <div>
         <label for="subject" class="form-label">제목 : </label>
-        <v-text-field variant="outlined" rounded="0" placeholder="제목..."></v-text-field>
+        <v-text-field v-model="writeNoticeReq.title" variant="outlined" rounded="0" placeholder="제목..."></v-text-field>
       </div>
       <div>
         <label for="content" class="form-label">내용 : </label>
-        <v-textarea variant="outlined" rounded="0" placeholder="내용"></v-textarea>
+        <v-textarea v-model="writeNoticeReq.content" variant="outlined" rounded="0" placeholder="내용"></v-textarea>
       </div>
       <v-btn @click="post()">글쓰기</v-btn>
     </div>

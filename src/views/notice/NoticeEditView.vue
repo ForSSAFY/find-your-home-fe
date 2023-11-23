@@ -42,14 +42,14 @@ function modify() {
       <h2>공지사항 - 글수정</h2>
       <div class="header-line"></div>
     </header>
-    <div class="content">
+    <div class="content" v-if="notice">
       <div>
         <label for="subject" class="form-label">제목 : </label>
-        <v-text-field variant="outlined" rounded="0" placeholder="제목..."></v-text-field>
+        <v-text-field v-model="notice.title" variant="outlined" rounded="0" placeholder="제목..."></v-text-field>
       </div>
       <div>
         <label for="content" class="form-label">내용 : </label>
-        <v-textarea variant="outlined" rounded="0" placeholder="내용"></v-textarea>
+        <v-textarea v-model="notice.content" variant="outlined" rounded="0" placeholder="내용"></v-textarea>
       </div>
       <v-btn @click="modify()">글 수정</v-btn>
     </div>
