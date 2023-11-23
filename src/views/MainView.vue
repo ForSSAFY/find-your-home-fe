@@ -10,32 +10,33 @@ const lng = ref(0)
 
 const cards = [
   {
-    title: '제목1',
-    description: '부제목1',
+    title: '[르포] “대출이 안나오니 집살 엄두가 안나요” 영끌족 발길 끊긴 노도강 [부동산360]',
+    description:
+      '“9월에 50년 만기 주택담보대출(주담대)이 사라지고 특례보금자리론 일반형 공급이 끊기면서 거래도, 문의도 거의 없어졌다고 보면 됩니다. 두세 달 전에 가격이 바짝 반등했던 분위기가 있었으니 저렴하게 내놓을 집주인도',
     imgurl:
-      'https://imgnews.pstatic.net/image/015/2023/11/17/0004915131_001_20231117082301050.jpg?type=w647',
-    href: 'https://n.news.naver.com/article/015/0004915131'
+      'https://imgnews.pstatic.net/image/016/2023/11/23/20231123000097_0_20231123085801296.jpg',
+    href: 'https://n.news.naver.com/article/016/0002228714'
   },
   {
-    title: '제목2',
-    description: '부제목2',
-    imgurl:
-      'https://imgnews.pstatic.net/image/023/2023/11/17/0003799646_001_20231117030316203.jpg?type=w647',
-    href: 'https://n.news.naver.com/article/015/0004915131'
+    title: '"전셋값 또 내려야 하나"... 공시가만 쳐다보는 빌라 주인들',
+    description:
+      '정부의 공시가격 시세반영률(현실화율) 동결 방침에 빌라 집주인이 울상이다. 올해 공시가가 역대 최대 하락한 데 이어 내년에도 추가로 내려갈 가능성이 커졌기 때문이다. 공시가가 내려가면 그만큼 보유세 부담이 줄어 대부',
+    imgurl: 'https://imgnews.pstatic.net/image/469/2023/11/23/0000771727_001_20231123043134634.jpg',
+    href: 'https://n.news.naver.com/article/469/0000771727'
   },
   {
-    title: '제목3',
-    description: '부제목3',
-    imgurl:
-      'https://imgnews.pstatic.net/image/015/2023/11/17/0004915131_001_20231117082301050.jpg?type=w647',
-    href: 'https://n.news.naver.com/article/015/0004915131'
+    title: "'검단구' 떼어내면 집값 더 오르려나…분양은 '훈풍'",
+    description:
+      '인천광역시 서구 집값이 26주 연속 상승세를 보인 가운데 30년 만에 행정구역 개편이 예고돼 눈길을 끈다. 행정구역 개편이 집값 상승으로 당장 이어지긴 어렵겠지만 검단신도시를 중심으로 대규모 입주가 이뤄지면서 기대감',
+    imgurl: 'https://imgnews.pstatic.net/image/648/2023/11/23/0000021223_001_20231123063101687.jpg',
+    href: 'https://n.news.naver.com/article/648/0000021223'
   }
 ]
 const notices = [
-  { date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/09/21) 개정안내' },
-  { date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/08/21) 개정안내' },
-  { date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/07/21) 개정안내' },
-  { date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/06/21) 개정안내' }
+  { no: 1, date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/09/21) 개정안내' },
+  { no: 2, date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/08/21) 개정안내' },
+  { no: 3, date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/07/21) 개정안내' },
+  { no: 4, date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/06/21) 개정안내' }
 ]
 
 /* 현재 위치 get*/
@@ -69,8 +70,16 @@ const search = () => {
         <br />
       </div>
       <div class="main-video-search">
-        <v-text-field class="main-search-input" variant="solo" placeholder="검색어를 입력해주세요" hide-details single-line flat
-          :model-value="searchWord" @update:model-value="(newValue) => (searchWord = newValue)" />
+        <v-text-field
+          class="main-search-input"
+          variant="solo"
+          placeholder="검색어를 입력해주세요"
+          hide-details
+          single-line
+          flat
+          :model-value="searchWord"
+          @update:model-value="(newValue) => (searchWord = newValue)"
+        />
         <v-btn icon="my_location" :elevation="0" @click="getCurrentPosition()" />
         <v-btn rounded="0" class="main-search-button" @click="search()">검색</v-btn>
       </div>
@@ -105,14 +114,17 @@ const search = () => {
         </div>
       </div>
 
-      <table class="notice-list">
-        <tbody>
-          <tr v-for="n in notices" :key="n.title">
-            <td>{{ n.date }}</td>
-            <td>{{ n.title }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <a
+        v-for="n in notices"
+        v-bind="n"
+        :key="n.title"
+        @click="$router.push({ name: 'view', params: { no: n.no } })"
+        class="notices"
+        style="cursor: pointer"
+      >
+        <div>{{ n.date }}</div>
+        <div>{{ n.title }}</div>
+      </a>
     </section>
   </article>
 </template>
@@ -175,7 +187,7 @@ video {
   margin: 0 auto;
 }
 
-.main-screen>section:not(:first-of-type) {
+.main-screen > section:not(:first-of-type) {
   margin-top: 6rem;
 }
 
@@ -215,24 +227,20 @@ video {
 
 /* 뉴스 화면 */
 .main-news-detail {
+  /* max-width: 1200px;
+  width: 100%; */
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   margin: 1rem -1rem 0;
 }
 
 /* 공지사항 화면 */
-.notice-list {
-  width: 100%;
-  border-collapse: collapse;
-  font-weight: 500;
+.notices {
+  display: flex;
   font-size: 1.25rem;
-}
-
-.notice-list tr {
+  font-weight: 500;
   border-bottom: 2px solid black;
-}
-
-.notice-list td {
+  gap: 20px;
   padding: 1.25rem;
 }
 </style>
