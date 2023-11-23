@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { doLogin } from '@/api/login';
+import { useLoginStore } from '@/stores/loginStore';
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 import { reactive, ref } from 'vue';
@@ -10,12 +11,12 @@ const visible = ref(false)
 
 //props 역할
 interface State {
-  id: string
+  username: string
   password: string
 }
 
 const initialState: State = {
-  id: '',
+  username: '',
   password: '',
 }
 
@@ -24,16 +25,22 @@ const state = reactive<State>({
 })
 
 const rules = {
-  id: { required },
+  username: { required },
   password: { required },
 }
 
 const v$ = useVuelidate(rules, state)
 
+const store = useLoginStore()
+
 const login = async () => {
   const isFormCorrect = await v$.value.$validate();
   if (!isFormCorrect) return;
   doLogin(state)
+    .then((res) => {
+      store.username = res.data.username
+      store.nickname = res.data.nickname
+    })
     .then(() => router.push({ name: 'main' }))
     .catch((err) => alert('로그인 실패!' + err))
 }
@@ -48,7 +55,7 @@ const login = async () => {
           <div class="header-line"></div>
         </div>
 
-        <v-text-field :error-messages="v$.id.$errors.map((e) => '아이디를 입력하세요.')" v-model="state.id" rounded="0"
+        <v-text-field :error-messages="v$.username.$errors.map((e) => '아이디를 입력하세요.')" v-model="state.username" rounded="0"
           density="comfortable" placeholder="아이디" prepend-inner-icon="person" variant="outlined"></v-text-field>
 
         <v-text-field :append-inner-icon="visible ? 'visibility_off' : 'visibility'" :type="visible ? 'text' : 'password'"

@@ -8,12 +8,12 @@ import { useRouter } from 'vue-router';
 const router = useRouter()
 
 interface State {
-  id: string
+  username: string
   email: string
 }
 
 const initialState: State = {
-  id: '',
+  username: '',
   email: ''
 }
 
@@ -22,7 +22,7 @@ const state = reactive<State>({
 })
 
 const rules = {
-  id: { required: helpers.withMessage('아이디를 입력해주세요', required) },
+  username: { required: helpers.withMessage('아이디를 입력해주세요', required) },
   email: {
     required: helpers.withMessage('이메일을 입력해주세요', required),
     email: helpers.withMessage('이메일 형식이 올바르지 않습니다', email)
@@ -56,7 +56,7 @@ const check = async () => {
         </header>
 
         <label class="font-label">아이디</label>
-        <v-text-field :error-messages="v$.id.$errors.map((e) => '아이디를 입력하세요')" v-model="state.id" rounded="0"
+        <v-text-field :error-messages="v$.username.$errors.map((e) => '아이디를 입력하세요')" v-model="state.username" rounded="0"
           placeholder="아이디를 입력하세요." variant="outlined" required></v-text-field>
 
         <label class="font-label">이메일</label>

@@ -10,7 +10,7 @@ const router = useRouter()
 
 //props 역할
 interface State {
-  id: string
+  username: string
   nickname: string
   email: string
   password: string
@@ -18,7 +18,7 @@ interface State {
 }
 
 const initialState: State = {
-  id: '',
+  username: '',
   nickname: '',
   email: '',
   password: '',
@@ -33,7 +33,7 @@ const regexId = helpers.regex(/^[a-z]+[a-z0-9]{6,12}$/g)
 const regexPass = helpers.regex(/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,20}$/)
 
 const rules = {
-  id: {
+  username: {
     required: helpers.withMessage('아이디를 입력해주세요', required),
     minLength: helpers.withMessage('아이디 최소 길이는 6글자입니다.', minLength(6)),
     maxLength: helpers.withMessage('아이디 최대 길이는 12글자입니다.', maxLength(12)),
@@ -99,9 +99,9 @@ const visible = ref(false)
 
         <label class="font-label">아이디</label>
         <div class="join-form-row">
-          <v-text-field :error-messages="v$.id.$errors.map((e) => toValue(e.$message))" v-model="state.id"
+          <v-text-field :error-messages="v$.username.$errors.map((e) => toValue(e.$message))" v-model="state.username"
             placeholder="아이디" hint="아이디는 6 ~ 12자의 영문,숫자만 사용가능합니다." variant="outlined" rounded="0" required
-            @input="v$.id.$touch" @blur="v$.id.$touch" />
+            @input="v$.username.$touch" @blur="v$.username.$touch" />
           <v-btn rounded="0" class="duplicate-check-button">중복확인</v-btn>
         </div>
 

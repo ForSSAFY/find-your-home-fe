@@ -1,4 +1,12 @@
 <script setup lang="ts">
+import { useLoginStore } from '@/stores/loginStore';
+
+const store = useLoginStore()
+
+function logout() {
+  store.username = ''
+  store.nickname = ''
+}
 </script>
 
 <template>
@@ -23,10 +31,20 @@
         </v-btn>
       </nav>
 
-      <div class="login-wrapper">
-        <v-btn variant="elevated" rounded="0" :to="{ name: 'login' }" class="login">로그인</v-btn>
-        <v-btn variant="outlined" rounded="0" :to="{ name: 'join' }" class="join">회원가입</v-btn>
-      </div>
+      <template v-if="!store.username">
+        <div class="login-wrapper">
+          <v-btn variant="elevated" rounded="0" :to="{ name: 'login' }" class="login">로그인</v-btn>
+          <v-btn variant="outlined" rounded="0" :to="{ name: 'join' }" class="join">회원가입</v-btn>
+        </div>
+      </template>
+      <template v-if="store.username">
+        <div class="login-wrapper">
+          <div style="font-weight: 500; font-size: large; margin-right: 0.5rem;">
+            <span style="font-weight: 700;">{{ store.nickname }}</span>님 안녕하세요.
+          </div>
+          <v-btn variant="outlined" rounded="0" class="join" @click="logout">로그아웃</v-btn>
+        </div>
+      </template>
     </div>
   </v-app-bar>
 </template>
@@ -58,6 +76,7 @@
 
 .login-wrapper {
   display: flex;
+  align-items: center;
   justify-content: end;
   gap: 0.5rem;
 }

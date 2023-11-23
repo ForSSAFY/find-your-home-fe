@@ -8,7 +8,7 @@ const path = import.meta.env.VITE_VUE_API_URL + '/user/register'
 type RegisterReq = {
   nickname: string
   email: string
-  id: string
+  username: string
   password: string
 }
 
