@@ -55,6 +55,7 @@ const displayNotices = computed(() => {
   display: flex;
   align-items: start;
   gap: 0.5rem;
+  margin-top: 2rem;
 }
 
 .header h2 {
@@ -77,7 +78,7 @@ const displayNotices = computed(() => {
   display: flex;
   border-bottom: 2px solid black;
   gap: 3rem;
-  padding: 1.5rem 0;
+  padding: 1.5rem;
   color: black;
   text-decoration: none;
   font-size: large;
