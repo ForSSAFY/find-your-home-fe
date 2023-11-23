@@ -33,10 +33,10 @@ const cards = [
   }
 ]
 const notices = [
-  { date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/09/21) 개정안내' },
-  { date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/08/21) 개정안내' },
-  { date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/07/21) 개정안내' },
-  { date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/06/21) 개정안내' }
+  { no: 1, date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/09/21) 개정안내' },
+  { no: 2, date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/08/21) 개정안내' },
+  { no: 3, date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/07/21) 개정안내' },
+  { no: 4, date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/06/21) 개정안내' }
 ]
 
 /* 현재 위치 get*/
@@ -114,14 +114,17 @@ const search = () => {
         </div>
       </div>
 
-      <table class="notice-list">
-        <tbody>
-          <tr v-for="n in notices" :key="n.title">
-            <td>{{ n.date }}</td>
-            <td>{{ n.title }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <a
+        v-for="n in notices"
+        v-bind="n"
+        :key="n.title"
+        @click="$router.push({ name: 'view', params: { no: n.no } })"
+        class="notices"
+        style="cursor: pointer"
+      >
+        <div>{{ n.date }}</div>
+        <div>{{ n.title }}</div>
+      </a>
     </section>
   </article>
 </template>
@@ -232,18 +235,12 @@ video {
 }
 
 /* 공지사항 화면 */
-.notice-list {
-  width: 100%;
-  border-collapse: collapse;
-  font-weight: 500;
+.notices {
+  display: flex;
   font-size: 1.25rem;
-}
-
-.notice-list tr {
+  font-weight: 500;
   border-bottom: 2px solid black;
-}
-
-.notice-list td {
+  gap: 20px;
   padding: 1.25rem;
 }
 </style>
