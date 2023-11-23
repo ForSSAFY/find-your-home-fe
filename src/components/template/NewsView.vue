@@ -7,10 +7,9 @@ const news = defineProps<{ title: string; description: string; imgurl: string; h
     <v-card :href="href" class="article" rounded="0">
       <div class="aricle-container">
         <v-img  class="article-img" :src="news.imgurl" cover></v-img>
-
         <div class="article-text">
-          <v-card-title class="article-title"> {{ news.title }} </v-card-title>
-          <v-card-subtitle class="article-desc">{{ news.description }}</v-card-subtitle>
+          <v-card-title class="article-title pa-0"> {{ news.title }} </v-card-title>
+          <v-card-subtitle class="article-desc pa-0">{{ news.description }}</v-card-subtitle>
         </div>
       </div>
     </v-card>
@@ -38,16 +37,11 @@ const news = defineProps<{ title: string; description: string; imgurl: string; h
 
 .article-text {
   text-decoration: none;
-}
-
-.article-title{
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  padding: 1rem;
 }
 
 .article-desc {
-  width: 1000px;
+  width: 900px;
   /* 텍스트 말줄임표 */
   text-overflow: ellipsis;
   white-space: nowrap;
