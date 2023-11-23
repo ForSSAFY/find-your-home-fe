@@ -89,9 +89,7 @@ const articles = [
         <div>{{ date }}</div>
       </div>
     </div>
-    <v-row>
-      <NewsView v-for="a in articles" v-bind="a" :key="a.title" />
-    </v-row>
+    <NewsView v-for="a in articles" v-bind="a" :key="a.title" />
   </v-container>
 </template>
 

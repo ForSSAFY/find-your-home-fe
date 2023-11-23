@@ -56,7 +56,7 @@
 }
 
 .marker__base:hover::after,
-.marker--hover .marker_-base::after {
+.marker--hover .marker__base::after {
   border-top-color: var(--marker-bg-color-hover);
 }
 

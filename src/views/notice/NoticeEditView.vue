@@ -32,7 +32,7 @@ function modify() {
   const no = route.params.no.toString();
   editNotice(no, { title: notice.value.title, content: notice.value.content })
     .then(() => router.push({ name: 'list', query: { no } }))
-  .catch(err => alert("글 수정 실패! :" + err))
+    .catch(err => alert("글 수정 실패! :" + err))
 }
 
 </script>
@@ -51,7 +51,7 @@ function modify() {
         <label for="content" class="form-label">내용 : </label>
         <v-textarea v-model="notice.content" variant="outlined" rounded="0" placeholder="내용"></v-textarea>
       </div>
-      <v-btn @click="modify()">글 수정</v-btn>
+      <v-btn variant="outlined" rounded="0" @click="modify()">글 수정</v-btn>
     </div>
   </v-container>
 </template>
@@ -61,6 +61,7 @@ function modify() {
   max-width: 800px;
   width: 100%;
 }
+
 .header {
   display: flex;
   align-items: start;

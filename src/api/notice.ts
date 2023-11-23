@@ -12,34 +12,26 @@ const path = import.meta.env.VITE_VUE_API_URL + '/notice'
   DELETE /notice/:no = no 글 삭제하기
  */
 
-type noticeReq = {
-    no: number,
-    date: number,
-    title: string,
-    content : string
-}
-
 export function listNotice() {
   return axios.get(path)
 }
 
-export function writeNotice(writeNoticeDto: {title: string,content : string}) {
+export function writeNotice(writeNoticeDto: { title: string; content: string }) {
   return axios.post(path, writeNoticeDto)
 }
 
-export function getNotice(no: number | string) {
-  return axios.get(path + '/' + no)
+export function getNotice(id: number | string) {
+  return axios.get(path + '/' + id)
 }
 
-export function getEditNotice(no: number | string) {
-  return axios.get(path + '/modify/' + no)
+export function getEditNotice(id: number | string) {
+  return axios.get(path + '/modify/' + id)
 }
 
-export function editNotice(no: number | string, editNoticeDto: {title: string,content : string}) {
-  return axios.put(path + '/' + no, editNoticeDto)
+export function editNotice(id: number | string, editNoticeDto: { title: string; content: string }) {
+  return axios.put(path + '/' + id, editNoticeDto)
 }
 
-export function deleteNotice(no: number | string) {
-  return axios.delete(path + '/' + no)
+export function deleteNotice(id: number | string) {
+  return axios.delete(path + '/' + id)
 }
-

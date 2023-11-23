@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { getAptsInArea, getSidogunInArea, type Apt, type Sidogun } from '@/api/place'
 import CustomMarkers from '@/components/CustomMarkers.vue'
+import { useLoginStore } from '@/stores/loginStore'
 import { debounce } from '@/utils/debounce'
 import { provide, ref, shallowRef, watch } from 'vue'
 import {
@@ -87,6 +88,8 @@ function onMarkerClick(marker: Apt | Sidogun & { level: number }) {
     updateVisibleMarkers()
   } else { // Apt 마커 클릭
     // MapAptInfoView로 처리 위임
+    signalCenter.value = { lat: marker.lat, lng: marker.lng }
+    signalLevel.value = Math.min(4, level.value)
     router.push({ name: 'apt', params: { id: marker.id }, query: route.query.search ? { back: encodeURIComponent(route.fullPath) } : undefined })
   }
 }
@@ -104,6 +107,14 @@ function convertLatLng(x: number, y: number, z: number) {
   // @ts-expect-error
   const ll2 = new Coords.value(_x + _z, _y + _z).toLatLng()
   return [ll1.getLng(), ll1.getLat(), ll2.getLng(), ll2.getLat()]
+}
+
+// ========== 로그인 헤더 관리 ==========
+const store = useLoginStore()
+
+function logout() {
+  store.username = ''
+  store.nickname = ''
 }
 </script>
 
@@ -131,10 +142,20 @@ function convertLatLng(x: number, y: number, z: number) {
           </v-btn>
         </nav>
 
-        <div class="login-wrapper">
-          <v-btn variant="elevated" rounded="0" :to="{ name: 'login' }" class="login">로그인</v-btn>
-          <v-btn variant="outlined" rounded="0" :to="{ name: 'join' }" class="join">회원가입</v-btn>
-        </div>
+        <template v-if="!store.username">
+          <div class="login-wrapper">
+            <v-btn variant="elevated" rounded="0" :to="{ name: 'login' }" class="login">로그인</v-btn>
+            <v-btn variant="outlined" rounded="0" :to="{ name: 'join' }" class="join">회원가입</v-btn>
+          </div>
+        </template>
+        <template v-if="store.username">
+          <div class="login-wrapper">
+            <div style="font-weight: 500; font-size: large; margin-right: 0.5rem;">
+              <span style="font-weight: 700;">{{ store.nickname }}</span>님 안녕하세요.
+            </div>
+            <v-btn variant="outlined" rounded="0" class="join" @click="logout">로그아웃</v-btn>
+          </div>
+        </template>
       </div>
     </v-app-bar>
     <!-- Sidebar -->
@@ -207,6 +228,7 @@ function convertLatLng(x: number, y: number, z: number) {
 
 .login-wrapper {
   display: flex;
+  align-items: center;
   justify-content: end;
   gap: 0.5rem;
 }

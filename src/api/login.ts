@@ -7,5 +7,9 @@ const path = import.meta.env.VITE_VUE_API_URL + '/user'
 */
 
 export function doLogin(LoginReq: { username: string; password: string }) {
-  return axios.post(path + '/login', LoginReq)
+  return axios.post(path + '/login', LoginReq, {
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  })
 }

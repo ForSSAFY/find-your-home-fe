@@ -14,6 +14,7 @@ const info = ref<AptInfo | null | undefined>(undefined)
 watch(() => route.params.id, (id) => {
   activeId.value = id?.toString()
   if (!activeId.value) return
+  info.value = undefined
   getAptInfo(activeId.value)
     .then(res => info.value = res.data)
     .then(apt => {

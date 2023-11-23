@@ -1,6 +1,7 @@
 <script lang="ts" setup>
+import { listNotice } from '@/api/notice';
 import CardView from '@/components/template/CardView.vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -32,12 +33,12 @@ const cards = [
     href: 'https://n.news.naver.com/article/648/0000021223'
   }
 ]
-const notices = [
-  { no: 1, date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/09/21) 개정안내' },
-  { no: 2, date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/08/21) 개정안내' },
-  { no: 3, date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/07/21) 개정안내' },
-  { no: 4, date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/06/21) 개정안내' }
-]
+// const notices = [
+//   { no: 1, date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/09/21) 개정안내' },
+//   { no: 2, date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/08/21) 개정안내' },
+//   { no: 3, date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/07/21) 개정안내' },
+//   { no: 4, date: 20231117, title: '[공지] Find your house 개인정보처리방침 (2023/06/21) 개정안내' }
+// ]
 
 /* 현재 위치 get*/
 const getCurrentPosition = () => {
@@ -58,6 +59,22 @@ const search = () => {
     router.push({ name: 'search', query: { search: searchWord.value } })
   }
 }
+
+/* 공지사항 */
+type NoticeList = {
+  id: number
+  createdAt: number | null
+  title: string
+  content: string
+}[]
+
+const notices = ref<NoticeList>([])
+
+onMounted(() => {
+  listNotice()
+    .then(res => notices.value = res.data.slice(0, 5))
+    .catch(console.error)
+})
 </script>
 
 <template>
@@ -70,16 +87,8 @@ const search = () => {
         <br />
       </div>
       <div class="main-video-search">
-        <v-text-field
-          class="main-search-input"
-          variant="solo"
-          placeholder="검색어를 입력해주세요"
-          hide-details
-          single-line
-          flat
-          :model-value="searchWord"
-          @update:model-value="(newValue) => (searchWord = newValue)"
-        />
+        <v-text-field class="main-search-input" variant="solo" placeholder="검색어를 입력해주세요" hide-details single-line flat
+          :model-value="searchWord" @update:model-value="(newValue) => (searchWord = newValue)" />
         <v-btn icon="my_location" :elevation="0" @click="getCurrentPosition()" />
         <v-btn rounded="0" class="main-search-button" @click="search()">검색</v-btn>
       </div>
@@ -114,17 +123,11 @@ const search = () => {
         </div>
       </div>
 
-      <a
-        v-for="n in notices"
-        v-bind="n"
-        :key="n.title"
-        @click="$router.push({ name: 'view', params: { no: n.no } })"
-        class="notices"
-        style="cursor: pointer"
-      >
-        <div>{{ n.date }}</div>
+      <router-link v-for="n in notices" v-bind="n" :key="n.title" :to="{ name: 'view', params: { id: n.id } }"
+        class="notice">
+        <div>{{ n.createdAt ?? new Date().toLocaleDateString() }}</div>
         <div>{{ n.title }}</div>
-      </a>
+      </router-link>
     </section>
   </article>
 </template>
@@ -187,7 +190,7 @@ video {
   margin: 0 auto;
 }
 
-.main-screen > section:not(:first-of-type) {
+.main-screen>section:not(:first-of-type) {
   margin-top: 6rem;
 }
 
@@ -235,12 +238,14 @@ video {
 }
 
 /* 공지사항 화면 */
-.notices {
+.notice {
   display: flex;
-  font-size: 1.25rem;
-  font-weight: 500;
   border-bottom: 2px solid black;
-  gap: 20px;
-  padding: 1.25rem;
+  gap: 3rem;
+  padding: 1.5rem;
+  color: black;
+  text-decoration: none;
+  font-size: large;
+  font-weight: 500;
 }
 </style>

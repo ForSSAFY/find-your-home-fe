@@ -1,27 +1,26 @@
 <script lang="ts" setup>
 import { listNotice } from '@/api/notice'
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-
-const router = useRouter()
 
 type NoticeList = {
-  no: number
-  date: number
+  id: number
+  createdAt: number | null
   title: string
-  contents: string
+  content: string
 }[]
 
 const list = ref<NoticeList>([])
 
 onMounted(() => {
-  listNotice().then(res=>{list.value = res.data.articles}).catch(console.error)
+  listNotice()
+    .then(res => list.value = res.data)
+    .then(console.log)
+    .catch(console.error)
 })
 
 const page = ref(1)
 const perPage = 10
-const totalNotice = list.value.length
-const totalPage = Math.ceil(totalNotice / perPage)
+const totalPage = computed(() => Math.ceil(list.value.length / perPage))
 
 const displayNotices = computed(() => {
   const start = (page.value - 1) * perPage
@@ -34,19 +33,16 @@ const displayNotices = computed(() => {
       <h2>공지사항</h2>
       <div class="header-line"></div>
     </header>
-    <a
-      v-for="n in displayNotices"
-      v-bind="n"
-      :key="n.title"
-      @click="$router.push({ name: 'view', params: { no: n.no } })"
-      class="notices"
-      style="cursor: pointer"
-    >
-      <div>{{ n.date }}</div>
-      <div>{{ n.title }}</div>
-    </a>
-    <v-pagination v-model="page" :length="totalPage"></v-pagination>
-    <v-btn variant="outlined" @click="$router.push({ name: 'write' })">글쓰기</v-btn>
+    <router-link v-for="notice in displayNotices" v-bind="notice" :key="notice.title"
+      :to="{ name: 'view', params: { id: notice.id } }" class="notice">
+      <div>{{ notice.createdAt }}</div>
+      <div>{{ notice.title }}</div>
+    </router-link>
+    <div style="position: relative; margin-top: 2rem;">
+      <v-btn variant="outlined" rounded="0" @click="$router.push({ name: 'write' })"
+        style="position: absolute; top: 0.5rem;">글쓰기</v-btn>
+      <v-pagination v-model="page" :length="totalPage" />
+    </div>
   </v-container>
 </template>
 <style scoped>
@@ -54,6 +50,7 @@ const displayNotices = computed(() => {
   max-width: 1200px;
   width: 100%;
 }
+
 .header {
   display: flex;
   align-items: start;
@@ -76,10 +73,14 @@ const displayNotices = computed(() => {
   height: 1.85rem;
 }
 
-.notices {
+.notice {
   display: flex;
   border-bottom: 2px solid black;
   gap: 20px;
-  padding: 1rem;
+  padding: 1.5rem 0;
+  color: black;
+  text-decoration: none;
+  font-size: large;
+  font-weight: 500;
 }
 </style>

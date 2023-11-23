@@ -47,7 +47,7 @@ const router = createRouter({
           redirect: { name: 'list' },
           children: [
             {
-              path: 'view/:no',
+              path: 'view/:id',
               name: 'view',
               component: () => import('@/views/notice/NoticeView.vue')
             },
@@ -89,22 +89,22 @@ const router = createRouter({
     {
       path: '/find-id',
       name: 'find-id',
-      component: () => import('@/views/user/FindIdView.vue'),
+      component: () => import('@/views/user/FindIdView.vue')
     },
     {
       path: '/find-id/complete',
       name: 'find-id-complete',
-      component: () => import('@/views/user/FindIdCompleteView.vue'),
+      component: () => import('@/views/user/FindIdCompleteView.vue')
     },
     {
       path: '/find-pw',
       name: 'find-pw',
-      component: () => import('@/views/user/FindPasswordView.vue'),
+      component: () => import('@/views/user/FindPasswordView.vue')
     },
     {
       path: '/find-pw/complete',
       name: 'find-pw-complete',
-      component: () => import('@/views/user/FindPasswordCompleteView.vue'),
+      component: () => import('@/views/user/FindPasswordCompleteView.vue')
     },
     {
       path: '/map',

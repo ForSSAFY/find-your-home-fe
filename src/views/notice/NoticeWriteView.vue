@@ -45,7 +45,7 @@ function post() {
         <label for="content" class="form-label">내용 : </label>
         <v-textarea v-model="writeNoticeReq.content" variant="outlined" rounded="0" placeholder="내용"></v-textarea>
       </div>
-      <v-btn @click="post()">글쓰기</v-btn>
+      <v-btn variant="outlined" rounded="0" @click="post()">글쓰기</v-btn>
     </div>
   </v-container>
 </template>
@@ -55,6 +55,7 @@ function post() {
   max-width: 800px;
   width: 100%;
 }
+
 .header {
   display: flex;
   align-items: start;

@@ -8,8 +8,8 @@ const route = useRoute()
 const router = useRouter()
 
 interface Notice {
-  no: number
-  date: number
+  id: number
+  createdAt: number
   title: string
   content: string
 }
@@ -17,15 +17,15 @@ interface Notice {
 const notice = ref<Notice>()
 
 onMounted(() => {
-  const no = route.params.no.toString()
-  getNotice(no)
+  const id = route.params.id.toString()
+  getNotice(id)
     .then((res) => (notice.value = res.data))
     .catch(console.error)
 })
 
 function remove() {
-  const no = route.params.no.toString()
-  deleteNotice(no)
+  const id = route.params.id.toString()
+  deleteNotice(id)
     .then(() => router.push({ name: 'list' }))
     .catch((err) => alert('글 삭제 실패 (' + err + ')'))
 }
@@ -36,24 +36,24 @@ function remove() {
       <h2>공지사항 - 글보기</h2>
       <div class="header-line"></div>
     </header>
+
     <div class="content" v-if="notice">
-      <div class="content-header">
-        <label for="subject" class="form-label">제목 : </label>
-        <p>{{ notice.title }}</p>
+      <p class="content-header mt-8" style="font-size: x-large; font-weight: 500;">
+        {{ notice.title }}
+      </p>
+      <div class="content-header" v-if="notice.createdAt">
+        <label class="form-label">작성일 : </label>
+        <p>{{ notice.createdAt }}</p>
       </div>
-      <div class="content-header">
-        <label for="date" class="form-label">날짜 : </label>
-        <p>{{ notice.date }}</p>
-      </div>
-      <div>
-        <label for="content" class="form-label">내용 : </label>
+      <div style="margin-top: 1rem;">
         <div>{{ notice.content }}</div>
       </div>
-      <v-btn v-bind="notice" @click="$router.push({ name: 'list' })">글목록</v-btn>
-      <v-btn v-bind="notice" @click="$router.push({ name: 'edit', params: { no: notice.no } })"
-        >글수정</v-btn
-      >
-      <v-btn @click="remove()">글삭제</v-btn>
+      <div class="buttons">
+        <v-btn variant="outlined" rounded="0" v-bind="notice" @click="$router.push({ name: 'list' })">글목록</v-btn>
+        <v-btn variant="outlined" rounded="0" v-bind="notice"
+          @click="$router.push({ name: 'edit', params: { no: notice.id } })">글수정</v-btn>
+        <v-btn variant="outlined" rounded="0" @click="remove()">글삭제</v-btn>
+      </div>
     </div>
   </v-container>
 </template>
@@ -63,6 +63,7 @@ function remove() {
   max-width: 800px;
   width: 100%;
 }
+
 .header {
   display: flex;
   align-items: start;
@@ -89,5 +90,14 @@ function remove() {
 .content-header {
   display: flex;
   gap: 1rem;
+  margin-top: 1rem;
+}
+
+.buttons {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+  border-top: 2px solid black;
+  padding-top: 1rem;
 }
 </style>
