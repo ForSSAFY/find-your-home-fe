@@ -35,7 +35,7 @@ const displayNotices = computed(() => {
     </header>
     <router-link v-for="notice in displayNotices" v-bind="notice" :key="notice.title"
       :to="{ name: 'view', params: { id: notice.id } }" class="notice">
-      <div>{{ notice.createdAt }}</div>
+      <div>{{ notice.createdAt ?? new Date().toLocaleDateString() }}</div>
       <div>{{ notice.title }}</div>
     </router-link>
     <div style="position: relative; margin-top: 2rem;">
@@ -76,7 +76,7 @@ const displayNotices = computed(() => {
 .notice {
   display: flex;
   border-bottom: 2px solid black;
-  gap: 20px;
+  gap: 3rem;
   padding: 1.5rem 0;
   color: black;
   text-decoration: none;
