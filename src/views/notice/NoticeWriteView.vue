@@ -1,5 +1,34 @@
 <script lang="ts" setup>
-import { useRouter } from 'vue-router';
+import { writeNotice } from '@/api/notice'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+interface WriteNoticeReq {
+  title: string
+  content: string
+}
+
+const writeNoticeReq = ref<WriteNoticeReq>({
+  title: '',
+  content: ''
+})
+
+function post() {
+  if (writeNoticeReq.value.title.trim().length < 1) {
+    alert('제목을 작성해주세요.')
+    return
+  }
+  if (writeNoticeReq.value.content.trim().length < 1) {
+    alert('내용을 작성해주세요')
+    return
+  }
+
+  writeNotice(writeNoticeReq.value)
+    .then(() => router.push({ name: 'list' }))
+    .catch((err) => alert('글 작성 에러!: ' + err))
+}
 </script>
 <template>
   <v-container class="container">
@@ -16,7 +45,7 @@ import { useRouter } from 'vue-router';
         <label for="content" class="form-label">내용 : </label>
         <v-textarea variant="outlined" rounded="0" placeholder="내용"></v-textarea>
       </div>
-      <v-btn @click="$router.push({name:'list'})">글쓰기</v-btn>
+      <v-btn @click="post()">글쓰기</v-btn>
     </div>
   </v-container>
 </template>

@@ -19,27 +19,27 @@ type noticeReq = {
     content : string
 }
 
-export function listQna() {
+export function listNotice() {
   return axios.get(path)
 }
 
-export function writeQna(writeNoticeDto: noticeReq) {
+export function writeNotice(writeNoticeDto: {title: string,content : string}) {
   return axios.post(path, writeNoticeDto)
 }
 
-export function getQna(no: number | string) {
+export function getNotice(no: number | string) {
   return axios.get(path + '/' + no)
 }
 
-export function getEditQna(no: number | string) {
+export function getEditNotice(no: number | string) {
   return axios.get(path + '/modify/' + no)
 }
 
-export function editQna(no: number | string, editNoticeDto: noticeReq) {
+export function editNotice(no: number | string, editNoticeDto: {title: string,content : string}) {
   return axios.put(path + '/' + no, editNoticeDto)
 }
 
-export function deleteQna(no: number | string) {
+export function deleteNotice(no: number | string) {
   return axios.delete(path + '/' + no)
 }
 
