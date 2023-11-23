@@ -38,13 +38,17 @@ const news = defineProps<{ title: string; description: string; imgurl: string; h
 .article-text {
   text-decoration: none;
   padding: 1rem;
-}
-
-.article-desc {
-  width: 900px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1 1 auto;
   /* 텍스트 말줄임표 */
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.article-desc {
+  
 }
 </style>
