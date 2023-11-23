@@ -1,20 +1,55 @@
 <script setup lang="ts">
-const news = defineProps < { title: string, description: string, imgurl: string, href: string }
->()
+const news = defineProps<{ title: string; description: string; imgurl: string; href: string }>()
 </script>
 
 <template>
-  <a :href="href" class="link">
-    <v-img height="15rem" :src="news.imgurl" cover></v-img>
+  <v-col>
+    <v-card :href="href" class="article" rounded="0">
+      <div class="aricle-container">
+        <v-img  class="article-img" :src="news.imgurl"></v-img>
 
-    <v-card-title> {{ news.title }} </v-card-title>
-
-    <v-card-subtitle> {{ news.description }} </v-card-subtitle>
-  </a>
+        <div class="article-text">
+          <v-card-title class="article-title"> {{ news.title }} </v-card-title>
+          <v-card-subtitle class="article-desc">{{ news.description }}</v-card-subtitle>
+        </div>
+      </div>
+    </v-card>
+  </v-col>
 </template>
 
 <style scoped>
-.link{
+.article {
+  padding: 0.5rem 0.5rem;
+}
 
+.article:hover {
+  background-color: rgb(204, 204, 204, 0.38);
+}
+
+.aricle-container {
+  display: flex;
+  align-items: center;
+}
+
+.article-img{
+  width: 10rem;
+}
+
+.article-text {
+  text-decoration: none;
+}
+
+.article-title{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.article-desc {
+  width: 1000px;
+  /* 텍스트 말줄임표 */
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 </style>
