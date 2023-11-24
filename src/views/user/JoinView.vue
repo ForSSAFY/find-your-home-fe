@@ -29,7 +29,7 @@ const state = reactive<State>({
   ...initialState
 })
 
-const regexId = helpers.regex(/^[a-z]+[a-z0-9]{6,12}$/g)
+const regexId = helpers.regex(/^[a-z]+[a-z0-9]{5,11}$/g)
 const regexPass = helpers.regex(/^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,20}$/)
 
 const rules = {
@@ -37,12 +37,12 @@ const rules = {
     required: helpers.withMessage('아이디를 입력해주세요', required),
     minLength: helpers.withMessage('아이디 최소 길이는 6글자입니다.', minLength(6)),
     maxLength: helpers.withMessage('아이디 최대 길이는 12글자입니다.', maxLength(12)),
-    regexId: helpers.withMessage('아이디는 8~16자의 영소문자 및 숫자만 가능합니다.', regexId)
+    regexId: helpers.withMessage('아이디는 6~12자의 영소문자 및 숫자만 가능합니다.', regexId)
   },
   nickname: {
     required: helpers.withMessage('닉네임을 입력해주세요', required),
-    minLength: helpers.withMessage('아이디 최소 길이는 2글자입니다.', minLength(2)),
-    maxLength: helpers.withMessage('아이디 최소 길이는 12글자입니다.', minLength(12))
+    minLength: helpers.withMessage('닉네임 최소 길이는 2글자입니다.', minLength(2)),
+    maxLength: helpers.withMessage('닉네임 최소 길이는 12글자입니다.', maxLength(12))
   },
   email: {
     required: helpers.withMessage('이메일을 입력해주세요', required),
@@ -85,6 +85,10 @@ const submit = async () => {
   router.push({ name: 'login' })
 }
 
+function alertOk() {
+  alert('사용 가능한 아이디입니다')
+}
+
 const visible = ref(false)
 </script>
 
@@ -102,7 +106,7 @@ const visible = ref(false)
           <v-text-field :error-messages="v$.username.$errors.map((e) => toValue(e.$message))" v-model="state.username"
             placeholder="아이디" hint="아이디는 6 ~ 12자의 영문,숫자만 사용가능합니다." variant="outlined" rounded="0" required
             @input="v$.username.$touch" @blur="v$.username.$touch" />
-          <v-btn rounded="0" class="duplicate-check-button">중복확인</v-btn>
+          <v-btn rounded="0" class="duplicate-check-button" @click="alertOk()">중복확인</v-btn>
         </div>
 
         <label class="font-label">이메일</label>
